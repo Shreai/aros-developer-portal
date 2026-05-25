@@ -43,7 +43,10 @@
   <section>
     <h3>Superadmin Billing Ops</h3>
     <input id="adminEmail" placeholder="customer email (optional if workspace owner exists)" size="50" />
+    <input id="invoiceId" placeholder="invoiceId (for retry payment)" size="50" />
     <button onclick="billingDashboard()">Billing Dashboard / Reconciliation</button>
+    <button onclick="billingReconciliation()">Drift Reconciliation Scan</button>
+    <button onclick="retryInvoicePayment()">Retry Invoice Payment</button>
     <button onclick="billingPasswordReset()">Issue Billing Password Reset</button>
   </section>
   <pre id="out"></pre>
@@ -74,6 +77,16 @@
         workspaceId:(billingWorkspaceId.value||'').trim()||undefined,
         email:(adminEmail.value||'').trim()||undefined
       },auth()));
+    }
+    async function billingReconciliation(){
+      const ws=(billingWorkspaceId.value||'').trim();
+      const q=ws?`?workspaceId=${encodeURIComponent(ws)}&limit=200`:'?limit=200';
+      out(await get('/v1/auth/billing/admin/reconciliation'+q,auth()));
+    }
+    async function retryInvoicePayment(){
+      const id=(invoiceId.value||'').trim();
+      if(!id){ out({error:'invoiceId required'}); return; }
+      out(await post('/v1/auth/billing/admin/invoices/'+encodeURIComponent(id)+'/retry-payment',{},auth()));
     }
   </script>
 </body>
