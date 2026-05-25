@@ -1,0 +1,9 @@
+name: aros-developer-portal
+tier: C
+lifecycle: active
+owner_team: platform-operations
+tech_lead: lead/platform-operations
+on_call_rotation: oncall/platform-operations
+slo_tier: best_effort
+data_classification: internal
+runbook: README.md
