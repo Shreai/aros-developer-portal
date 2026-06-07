@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import AgentsSection from './agents/AgentsSection.jsx';
+import ToolsSkillsSection from './agents/ToolsSkillsSection.jsx';
 
 const SDKS = [
   { icon: '🟨', name: 'JavaScript / TypeScript', desc: 'Node.js, React, React Native, Electron, Browser', install: 'npm install @aros/pos-sdk', lang: 'javascript' },
@@ -277,6 +279,8 @@ function Header() {
           <a href="#intelligence" onClick={closeMenu}>Intelligence</a>
           <a href="#vendors" onClick={closeMenu}>POS Systems</a>
           <a href="#architecture" onClick={closeMenu}>Architecture</a>
+          <a href="#agent-factory" onClick={closeMenu} style={{color: 'var(--accent)', fontWeight: 700}}>Agent Factory</a>
+          <a href="#tools-skills" onClick={closeMenu}>Tools &amp; Skills</a>
           <a href="https://github.com/Nirpat3/aros-developer-portal" target="_blank" rel="noopener">GitHub</a>
         </nav>
       </div>
@@ -546,6 +550,8 @@ export default function App() {
       <IntelligenceSection />
       <VendorSection />
       <Architecture />
+      <AgentsSection />
+      <ToolsSkillsSection />
       <Footer />
     </>
   );

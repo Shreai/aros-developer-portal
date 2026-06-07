@@ -4,12 +4,15 @@
   "type": "module",
   "scripts": {
     "dev": "node server.mjs",
-    "build": "echo \"portal static build ok\"",
-    "test": "echo \"portal no tests yet\"",
+    "build": "cd portal && npm run build",
+    "test": "npx vitest run",
     "lint": "echo \"portal no lint yet\""
   },
   "dependencies": {
     "@hono/node-server": "^1.19.13",
     "hono": "^4.12.18"
+  },
+  "devDependencies": {
+    "vitest": "^4.1.8"
   }
 }
