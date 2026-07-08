@@ -1,0 +1,46 @@
+name: Release
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - "v*"
+      - "beta-*"
+
+jobs:
+  build-release:
+    name: Build portal release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: portal/package-lock.json
+      - name: Build portal
+        working-directory: portal
+        run: |
+          npm ci
+          npm run build
+      - name: Package release
+        run: |
+          mkdir -p release/package
+          cp -R portal/dist release/package/portal-dist
+          cp -R sdks release/package/sdks
+          cp -R examples release/package/examples
+          cp README.md DEPLOYMENT.md OWNERSHIP.md release/package/
+          cd release/package
+          zip -r ../aros-developer-portal.zip .
+      - name: Upload workflow artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: aros-developer-portal
+          path: release/aros-developer-portal.zip
+      - name: Publish GitHub release
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: release/aros-developer-portal.zip
