@@ -28,6 +28,19 @@ npm ci
 npm run build
 ```
 
+## CI
+
+`.github/workflows/ci.yml` calls the org reusable Node CI
+(`Shreai/.github` → `reusable-node-ci.yml`) with `working-directory: portal`:
+`npm ci` + `vite build` on every push/PR. This is a static docs SPA, so a
+passing build is the CI gate — deployment is publishing `portal/dist` (or
+running `portal/server.mjs` in front of it) at the chosen production route
+below; no separate runtime pipeline is needed.
+
+Note: `portal/server.test.mjs` (vitest) reads `../../ports.json` from outside
+this repo, so it only runs in the original multi-repo workspace layout, not in
+CI. `.github/workflows/release.yml` builds and packages the release zip.
+
 ## Environments
 
 GitHub environments already created:
