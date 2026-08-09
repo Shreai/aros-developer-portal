@@ -11,6 +11,7 @@
 Comprehensive test suite and shared infrastructure for validating all 5 Shre SDK platforms (iOS, Android, Web, Python, .NET) against locked API contracts.
 
 **What was delivered:**
+
 1. ✅ JavaScript SDK contract tests (40+ tests, 1,550 lines)
 2. ✅ Shared contract specification (machine-readable, 1,200+ lines JSON)
 3. ✅ Test checklist template (40-item matrix, 5 platforms)
@@ -24,14 +25,14 @@ Comprehensive test suite and shared infrastructure for validating all 5 Shre SDK
 
 ### Core Deliverables
 
-| File | Purpose | Lines | Status |
-|------|---------|-------|--------|
-| `sdks/javascript/v2/__tests__/ShreSDK.test.ts` | JavaScript contract tests | 1,550 | ✅ Complete |
-| `sdks/contracts.test.json` | Shared contract specification | 1,200+ | ✅ Complete |
-| `sdks/TEST-CHECKLIST.md` | 40-item testing checklist | 350+ | ✅ Complete |
-| `sdks/TESTING.md` | Comprehensive testing guide | 600+ | ✅ Complete |
-| `sdks/javascript/v2/vitest.config.ts` | Vitest configuration | 25 | ✅ Complete |
-| `sdks/javascript/v2/package.json` | Updated with test deps | Updated | ✅ Complete |
+| File                                           | Purpose                       | Lines   | Status      |
+| ---------------------------------------------- | ----------------------------- | ------- | ----------- |
+| `sdks/javascript/v2/__tests__/ShreSDK.test.ts` | JavaScript contract tests     | 1,550   | ✅ Complete |
+| `sdks/contracts.test.json`                     | Shared contract specification | 1,200+  | ✅ Complete |
+| `sdks/TEST-CHECKLIST.md`                       | 40-item testing checklist     | 350+    | ✅ Complete |
+| `sdks/TESTING.md`                              | Comprehensive testing guide   | 600+    | ✅ Complete |
+| `sdks/javascript/v2/vitest.config.ts`          | Vitest configuration          | 25      | ✅ Complete |
+| `sdks/javascript/v2/package.json`              | Updated with test deps        | Updated | ✅ Complete |
 
 ---
 
@@ -48,6 +49,7 @@ Comprehensive test suite and shared infrastructure for validating all 5 Shre SDK
 #### 1. POST /v1/events/batch (12 tests)
 
 **Happy Path (7 tests):**
+
 - ✅ Accept single event with required headers
 - ✅ Accept multiple events in batch
 - ✅ Include eventId for idempotency
@@ -57,6 +59,7 @@ Comprehensive test suite and shared infrastructure for validating all 5 Shre SDK
 - ✅ Handle JSON response deserialization
 
 **Error Handling (5 tests):**
+
 - ✅ Handle 400 Bad Request
 - ✅ Handle 401 Unauthorized
 - ✅ Handle 429 Rate Limited
@@ -66,12 +69,14 @@ Comprehensive test suite and shared infrastructure for validating all 5 Shre SDK
 #### 2. POST /v1/sdk/session (8 tests)
 
 **Happy Path (4 tests):**
+
 - ✅ Return sdkToken for read_write mode
 - ✅ Send bootstrap key in read_write mode
 - ✅ Send x-shre-tenant header
 - ✅ Use POST method
 
 **Error Handling (4 tests):**
+
 - ✅ Handle invalid bootstrap key (401)
 - ✅ Handle missing endpoint (400)
 - ✅ Handle server error (500)
@@ -80,6 +85,7 @@ Comprehensive test suite and shared infrastructure for validating all 5 Shre SDK
 #### 3. GET /v1/sdk/config (8 tests)
 
 **Happy Path (5 tests):**
+
 - ✅ Return config with required fields
 - ✅ Use GET method
 - ✅ Send x-shre-tenant header
@@ -87,6 +93,7 @@ Comprehensive test suite and shared infrastructure for validating all 5 Shre SDK
 - ✅ Return application/json content type
 
 **Error Handling (3 tests):**
+
 - ✅ Handle missing x-shre-tenant (400)
 - ✅ Handle kill-switch (trackingEnabled: false)
 - ✅ Handle disabled events list
@@ -94,6 +101,7 @@ Comprehensive test suite and shared infrastructure for validating all 5 Shre SDK
 #### 4. POST /v1/sdk/heartbeat (8 tests)
 
 **Happy Path (6 tests):**
+
 - ✅ Send heartbeat successfully
 - ✅ Include tenantId in heartbeat
 - ✅ Include app in heartbeat
@@ -102,6 +110,7 @@ Comprehensive test suite and shared infrastructure for validating all 5 Shre SDK
 - ✅ Send x-shre-tenant header
 
 **Error Handling (2 tests):**
+
 - ✅ Handle network failure gracefully
 - ✅ Server returns 200 even on transient issues
 
@@ -115,6 +124,7 @@ Comprehensive test suite and shared infrastructure for validating all 5 Shre SDK
 ### Test Implementation Patterns
 
 **1. Mock Fetch Pattern:**
+
 ```typescript
 const mockFetch = (responses: Record<string, Partial<MockResponse>>): FetchMock => {
   return async (url: string, opts?: RequestInit): Promise<MockResponse> => {
@@ -127,12 +137,13 @@ const mockFetch = (responses: Record<string, Partial<MockResponse>>): FetchMock 
 ```
 
 **2. Header Verification Pattern:**
+
 ```typescript
 let capturedHeaders: Record<string, string> | null = null;
 const tracingFetch: typeof fetchMockFn = async (url, opts) => {
   if (url.includes('/v1/events/batch')) {
     capturedHeaders = Object.fromEntries(
-      Object.entries((opts?.headers as Record<string, string>) ?? {})
+      Object.entries((opts?.headers as Record<string, string>) ?? {}),
     );
   }
   return originalFetch(url, opts);
@@ -140,6 +151,7 @@ const tracingFetch: typeof fetchMockFn = async (url, opts) => {
 ```
 
 **3. Response Deserialization Pattern:**
+
 ```typescript
 const ack = await sdk.flush();
 expect(ack.accepted).toBe(1);
@@ -149,6 +161,7 @@ expect(typeof ack.nextFlushSeconds).toBe('number');
 ```
 
 **4. Error Handling Pattern:**
+
 ```typescript
 const errors: Array<{ err: Error; context: string }> = [];
 sdk.init({
@@ -242,13 +255,13 @@ expect(errors[0].context).toBe('flush');
 
 ### Test Coverage Matrix
 
-| Platform    | Framework | File Location | Test Count |
-|-------------|-----------|---------------|-----------|
-| JavaScript  | Vitest    | javascript/v2/__tests__/ShreSDK.test.ts | 40+ |
-| iOS         | XCTest    | shre-router/src/routes/__tests__/sdk.test.ts | 40+ |
-| Android     | JUnit     | kotlin/src/test/kotlin/**SdkContractTest.kt | 40+ |
-| Python      | pytest    | python/tests/test_sdk.py | 40+ |
-| .NET        | NUnit     | dotnet/ShreAI.Tests/SdkContractTests.cs | 40+ |
+| Platform   | Framework | File Location                                 | Test Count |
+| ---------- | --------- | --------------------------------------------- | ---------- |
+| JavaScript | Vitest    | javascript/v2/**tests**/ShreSDK.test.ts       | 40+        |
+| iOS        | XCTest    | shre-router/src/routes/**tests**/sdk.test.ts  | 40+        |
+| Android    | JUnit     | kotlin/src/test/kotlin/\*\*SdkContractTest.kt | 40+        |
+| Python     | pytest    | python/tests/test_sdk.py                      | 40+        |
+| .NET       | NUnit     | dotnet/ShreAI.Tests/SdkContractTests.cs       | 40+        |
 
 ---
 
@@ -260,11 +273,11 @@ expect(errors[0].context).toBe('flush');
 
 ### Matrix Structure
 
-| Test Case | JavaScript | iOS | Android | Python | .NET |
-|-----------|:----------:|:---:|:-------:|:------:|:----:|
-| accept_single_event | [ ] | [ ] | [ ] | [ ] | [ ] |
-| accept_multiple_events | [ ] | [ ] | [ ] | [ ] | [ ] |
-| ... | ... | ... | ... | ... | ... |
+| Test Case              | JavaScript | iOS | Android | Python | .NET |
+| ---------------------- | :--------: | :-: | :-----: | :----: | :--: |
+| accept_single_event    |    [ ]     | [ ] |   [ ]   |  [ ]   | [ ]  |
+| accept_multiple_events |    [ ]     | [ ] |   [ ]   |  [ ]   | [ ]  |
+| ...                    |    ...     | ... |   ...   |  ...   | ...  |
 
 **Total: 40 tests × 5 platforms = 200 test executions**
 
@@ -279,6 +292,7 @@ expect(errors[0].context).toBe('flush');
 ### Execution Instructions
 
 **JavaScript:**
+
 ```bash
 cd aros-developer-portal/sdks/javascript/v2
 npm install
@@ -287,17 +301,20 @@ npm test
 ```
 
 **iOS:**
+
 ```bash
 pnpm test shre-router/src/routes/__tests__/sdk.test.ts
 ```
 
 **Android:**
+
 ```bash
 cd aros-developer-portal/sdks/kotlin
 ./gradlew test
 ```
 
 **Python:**
+
 ```bash
 cd aros-developer-portal/sdks/python
 pip install -e ".[test]"
@@ -305,6 +322,7 @@ pytest tests/test_sdk.py -v
 ```
 
 **.NET:**
+
 ```bash
 cd aros-developer-portal/sdks/dotnet
 dotnet test ShreAI.Tests.csproj
@@ -344,6 +362,7 @@ npm test
 ```
 
 **Expected output:**
+
 ```
 ✓ Shre SDK v2.0.0 — Contract Tests (40+ tests)
   ✓ Endpoint: POST /v1/events/batch (12 tests)
@@ -357,13 +376,13 @@ npm test
 
 ### Test Command Reference
 
-| Platform | Command |
-|----------|---------|
-| JavaScript | `npm test` (from sdks/javascript/v2/) |
-| iOS | `pnpm test shre-router/src/routes/__tests__/sdk.test.ts` |
-| Android | `./gradlew test` (from sdks/kotlin/) |
-| Python | `pytest tests/test_sdk.py -v` (from sdks/python/) |
-| .NET | `dotnet test` (from sdks/dotnet/) |
+| Platform   | Command                                                  |
+| ---------- | -------------------------------------------------------- |
+| JavaScript | `npm test` (from sdks/javascript/v2/)                    |
+| iOS        | `pnpm test shre-router/src/routes/__tests__/sdk.test.ts` |
+| Android    | `./gradlew test` (from sdks/kotlin/)                     |
+| Python     | `pytest tests/test_sdk.py -v` (from sdks/python/)        |
+| .NET       | `dotnet test` (from sdks/dotnet/)                        |
 
 ---
 
@@ -433,21 +452,22 @@ npm test
 
 ## Test Statistics
 
-| Metric | Value |
-|--------|-------|
-| Total test cases | 40+ per platform |
-| Total platform coverage | 5 (iOS, Android, Web, Python, .NET) |
-| Total test executions | 200+ (40 × 5 platforms) |
-| Expected test duration | <10 seconds per platform |
-| Total expected time | ~5 minutes (all platforms in parallel) |
-| Code coverage (SDK) | 100% of public API |
-| Contract coverage | 4/4 endpoints (100%) |
+| Metric                  | Value                                  |
+| ----------------------- | -------------------------------------- |
+| Total test cases        | 40+ per platform                       |
+| Total platform coverage | 5 (iOS, Android, Web, Python, .NET)    |
+| Total test executions   | 200+ (40 × 5 platforms)                |
+| Expected test duration  | <10 seconds per platform               |
+| Total expected time     | ~5 minutes (all platforms in parallel) |
+| Code coverage (SDK)     | 100% of public API                     |
+| Contract coverage       | 4/4 endpoints (100%)                   |
 
 ---
 
 ## Success Criteria
 
 ✅ **All deliverables complete:**
+
 - JavaScript SDK contract tests (40+ tests, 1,550 lines)
 - Shared contract specification (contracts.test.json)
 - Test checklist template (40-item matrix)
@@ -456,6 +476,7 @@ npm test
 - Updated package.json with test dependencies
 
 ✅ **Tests validate:**
+
 - All 4 locked endpoints
 - All required headers
 - All HTTP methods
@@ -465,6 +486,7 @@ npm test
 - JSON serialization/deserialization
 
 ✅ **Infrastructure supports:**
+
 - Single source of truth (contracts.test.json)
 - All 5 platforms (iOS, Android, Web, Python, .NET)
 - CI/CD enforcement (blocks breaking changes)

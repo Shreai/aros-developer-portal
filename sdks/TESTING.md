@@ -28,6 +28,7 @@ npm test
 ```
 
 Expected output:
+
 ```
 ✓ Shre SDK v1.0.0 — Contract Tests (40+ tests)
   ✓ Endpoint: POST /v1/events/batch (12 tests)
@@ -75,6 +76,7 @@ A machine-readable specification that ALL SDKs use as their contract source of t
 - **Breaking change protocol** (6-month deprecation window)
 
 **Why it exists:**
+
 - Single source of truth for all 5 platforms
 - Prevents SDK drift (each platform could diverge)
 - Makes contract changes visible to all teams
@@ -118,6 +120,7 @@ A 40-item checklist that documents:
 - ✅ Edge cases (malformed JSON, missing headers, wrong methods)
 
 **Run:**
+
 ```bash
 npm test                    # Run all tests
 npm test -- --ui           # Open Vitest UI
@@ -135,6 +138,7 @@ npm test -- --reporter=verbose
 6. **Verify deserialization** (response types, fields)
 
 **Example test:**
+
 ```typescript
 it('should accept events with required headers', async () => {
   const response = await fetch(`${BASE_URL}/v1/events/batch`, {
@@ -148,7 +152,7 @@ it('should accept events with required headers', async () => {
       events: [{ eventId: 'uuid-1', eventName: 'app_launch' }],
     }),
   });
-  
+
   expect(response.status).toBe(200);
   const data = await response.json();
   expect(data).toHaveProperty('accepted');
@@ -166,6 +170,7 @@ it('should accept events with required headers', async () => {
 **Test count:** 40+
 
 **Run:**
+
 ```bash
 pnpm test shre-router/src/routes/__tests__/sdk.test.ts
 ```
@@ -181,14 +186,17 @@ pnpm test shre-router/src/routes/__tests__/sdk.test.ts
 **Method:** POST
 
 **Required headers:**
+
 - `x-shre-tenant` — Identifies tenant/merchant
 - `x-shre-app` — Identifies app (rapid_pos, rapid_bos)
 - `Content-Type: application/json`
 
 **Optional headers:**
+
 - `Authorization: Bearer <token>` — For read_write mode
 
 **Request body:**
+
 ```json
 {
   "events": [
@@ -205,6 +213,7 @@ pnpm test shre-router/src/routes/__tests__/sdk.test.ts
 ```
 
 **Response (200 OK):**
+
 ```json
 {
   "accepted": 1,
@@ -216,6 +225,7 @@ pnpm test shre-router/src/routes/__tests__/sdk.test.ts
 ```
 
 **Error responses:**
+
 - **400** — Missing headers or malformed JSON
 - **401** — Invalid token (read_write mode)
 - **403** — Tracking disabled (kill switch)
@@ -223,6 +233,7 @@ pnpm test shre-router/src/routes/__tests__/sdk.test.ts
 - **500** — Server error
 
 **Test cases:**
+
 1. Accept single event with headers
 2. Accept multiple events
 3. Include eventId for idempotency
@@ -245,10 +256,12 @@ pnpm test shre-router/src/routes/__tests__/sdk.test.ts
 **Method:** POST
 
 **Required headers:**
+
 - `x-shre-tenant`
 - `Content-Type: application/json`
 
 **Request body:**
+
 ```json
 {
   "tenantId": "merchant-123",
@@ -263,6 +276,7 @@ pnpm test shre-router/src/routes/__tests__/sdk.test.ts
 ```
 
 **Response (200 OK):**
+
 ```json
 {
   "sdkToken": "jwt-token or null",
@@ -278,11 +292,13 @@ pnpm test shre-router/src/routes/__tests__/sdk.test.ts
 **Note:** `sdkToken` is null for read_only mode, JWT string for read_write.
 
 **Error responses:**
+
 - **400** — Missing required field
 - **401** — Invalid bootstrap key
 - **500** — Server error
 
 **Test cases:**
+
 1. Return sdkToken for read_write mode
 2. Send bootstrap key in read_write mode
 3. Send x-shre-tenant header
@@ -301,9 +317,11 @@ pnpm test shre-router/src/routes/__tests__/sdk.test.ts
 **Method:** GET
 
 **Required headers:**
+
 - `x-shre-tenant`
 
 **Response (200 OK):**
+
 ```json
 {
   "trackingEnabled": true,
@@ -316,6 +334,7 @@ pnpm test shre-router/src/routes/__tests__/sdk.test.ts
 ```
 
 **Field meanings:**
+
 - `trackingEnabled` — Kill switch (if false, SDK stops all tracking)
 - `disabledEvents` — Event names to filter client-side
 - `piiMasking` — Should SDK mask PII
@@ -324,10 +343,12 @@ pnpm test shre-router/src/routes/__tests__/sdk.test.ts
 - `batchSize` — Events per batch
 
 **Error responses:**
+
 - **400** — Missing x-shre-tenant header
 - **500** — Server error
 
 **Test cases:**
+
 1. Return config with required fields
 2. Use GET method
 3. Send x-shre-tenant header
@@ -346,11 +367,13 @@ pnpm test shre-router/src/routes/__tests__/sdk.test.ts
 **Method:** POST
 
 **Required headers:**
+
 - `x-shre-tenant`
 - `x-shre-app`
 - `Content-Type: application/json`
 
 **Request body:**
+
 ```json
 {
   "tenantId": "merchant-123",
@@ -363,6 +386,7 @@ pnpm test shre-router/src/routes/__tests__/sdk.test.ts
 ```
 
 **Response (200 OK):**
+
 ```json
 {
   "status": "ok"
@@ -370,6 +394,7 @@ pnpm test shre-router/src/routes/__tests__/sdk.test.ts
 ```
 
 **Test cases:**
+
 1. Send heartbeat successfully
 2. Include tenantId in heartbeat
 3. Include app in heartbeat
@@ -385,23 +410,23 @@ pnpm test shre-router/src/routes/__tests__/sdk.test.ts
 
 ### Headers (enforced on all requests)
 
-| Header         | Required? | Value             | Purpose                      |
-|----------------|-----------|-------------------|------------------------------|
-| x-shre-tenant  | Yes       | String            | Identifies tenant/merchant   |
-| x-shre-app     | Conditionally | String        | rapid_pos, rapid_bos         |
-| Content-Type   | Conditionally | application/json | POST/GET endpoints           |
-| Authorization  | No        | Bearer <token>    | read_write mode only         |
+| Header        | Required?     | Value            | Purpose                    |
+| ------------- | ------------- | ---------------- | -------------------------- |
+| x-shre-tenant | Yes           | String           | Identifies tenant/merchant |
+| x-shre-app    | Conditionally | String           | rapid_pos, rapid_bos       |
+| Content-Type  | Conditionally | application/json | POST/GET endpoints         |
+| Authorization | No            | Bearer <token>   | read_write mode only       |
 
 ### Response Status Codes
 
-| Code | Meaning                           | When                                    |
-|------|-----------------------------------|-----------------------------------------|
-| 200  | Success                           | All valid requests                      |
-| 400  | Bad Request                       | Missing/invalid headers, malformed JSON |
-| 401  | Unauthorized                      | Invalid token or bootstrap key          |
-| 403  | Forbidden                         | Tracking disabled (kill switch)         |
-| 429  | Rate Limited                      | Too many requests                       |
-| 500  | Server Error                      | Internal server error                   |
+| Code | Meaning      | When                                    |
+| ---- | ------------ | --------------------------------------- |
+| 200  | Success      | All valid requests                      |
+| 400  | Bad Request  | Missing/invalid headers, malformed JSON |
+| 401  | Unauthorized | Invalid token or bootstrap key          |
+| 403  | Forbidden    | Tracking disabled (kill switch)         |
+| 429  | Rate Limited | Too many requests                       |
+| 500  | Server Error | Internal server error                   |
 
 ### Content Type
 
@@ -427,6 +452,7 @@ The 6-month deprecation policy ensures developers have time to update:
 **Step 3:** Update SDK integration guides with migration path
 
 **Step 4:** Announce in changelog:
+
 ```
 OLD: "endpoint deprecated DATE, will be removed DATE+6mo"
 NEW: "endpoint removed after 6-month sunset"
@@ -437,6 +463,7 @@ NEW: "endpoint removed after 6-month sunset"
 ### Example: Adding a new field
 
 **Wrong (breaking):**
+
 ```
 POST /v1/events/batch
   response: { accepted, rejected, trackingEnabled, newField }
@@ -444,6 +471,7 @@ POST /v1/events/batch
 ```
 
 **Right (backward-compatible):**
+
 ```
 POST /v1/events/batch
   response: { accepted, rejected, trackingEnabled }
@@ -463,6 +491,7 @@ POST /v1/events/batch/v2  (NEW)
 **File:** `scripts/validate-sdk-contracts.sh`
 
 Runs before committing:
+
 ```bash
 # JavaScript
 npm test --prefix aros-developer-portal/sdks/javascript/v2
@@ -492,6 +521,7 @@ If any fail, commit is blocked.
 ### Example: Testing a new error case
 
 1. **Update contracts.test.json:**
+
    ```json
    {
      "name": "handle_403_forbidden",
@@ -502,6 +532,7 @@ If any fail, commit is blocked.
    ```
 
 2. **Update JavaScript test:**
+
    ```typescript
    it('should handle 403 Forbidden', async () => {
      fetchMockFn = mockFetch({
@@ -511,11 +542,11 @@ If any fail, commit is blocked.
          jsonData: { error: 'tracking_disabled' },
        },
      });
-     
+
      sdk.init({ ... });
      sdk.trackEvent('test', { metadata: {} });
      const ack = await sdk.flush();
-     
+
      expect(ack.trackingEnabled).toBe(false);
    });
    ```
@@ -523,14 +554,16 @@ If any fail, commit is blocked.
 3. **Update all other SDKs** (iOS, Android, Python, .NET) with same test
 
 4. **Update TEST-CHECKLIST.md:**
+
    ```markdown
    - [ ] Handle 403 Forbidden
    ```
 
 5. **Commit with message:**
+
    ```
    test: add contract test for 403 forbidden response
-   
+
    Ensures all SDKs handle tracking disabled (kill switch) correctly.
    ```
 
@@ -543,6 +576,7 @@ If any fail, commit is blocked.
 **Likely cause:** Environment variables or network access
 
 **Solution:**
+
 - Check `.env` files are not in `.gitignore`
 - Verify CI has network access to test endpoints
 - Use mocked responses (don't call real endpoints in CI)
@@ -552,6 +586,7 @@ If any fail, commit is blocked.
 **Likely cause:** Missing dependency
 
 **Solution:**
+
 ```bash
 npm install  # JavaScript
 gradle build  # Android
@@ -564,6 +599,7 @@ dotnet restore  # .NET
 **Likely cause:** Response schema changed
 
 **Solution:**
+
 1. Check if endpoint was updated
 2. Review `contracts.test.json` for new schema
 3. Update test expectations
@@ -575,6 +611,7 @@ dotnet restore  # .NET
 **Likely cause:** Network latency or endpoint down
 
 **Solution:**
+
 - Check endpoint status: `curl https://api.shre.ai/health`
 - Increase timeout in SDK config: `{ timeoutMs: 10_000 }`
 - Check for rate limiting

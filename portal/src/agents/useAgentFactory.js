@@ -22,8 +22,9 @@ function getClient(token) {
   _lastToken = token;
   _client = createAgentFactoryClient({
     // VITE_ vars are inlined at build time; fall back gracefully
-    baseUrl: (typeof import.meta !== 'undefined' && import.meta.env?.VITE_AGENT_FACTORY_URL)
-      || 'http://localhost:8080/api/v1',
+    baseUrl:
+      (typeof import.meta !== 'undefined' && import.meta.env?.VITE_AGENT_FACTORY_URL) ||
+      'http://localhost:8080/api/v1',
     token,
     fetchImpl: fetch,
   });
@@ -43,7 +44,9 @@ export function useAgentFactory() {
   });
 
   const setToken = useCallback((t) => {
-    try { sessionStorage.setItem('af_token', t); } catch {}
+    try {
+      sessionStorage.setItem('af_token', t);
+    } catch {}
     setTokenState(t);
     _client = null; // force re-creation
   }, []);

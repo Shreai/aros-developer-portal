@@ -20,6 +20,7 @@ python manage.py runserver
 ```
 
 Then:
+
 - **Admin**: http://localhost:8000/admin/ (use credentials created above)
 - **Dashboard**: http://localhost:8000/
 
@@ -33,6 +34,7 @@ Then:
 ## Integration Points
 
 ### Admin Integration
+
 ```python
 class ProductAdmin(admin.ModelAdmin):
     def save_model(self, request, obj, form, change):
@@ -44,6 +46,7 @@ class ProductAdmin(admin.ModelAdmin):
 ```
 
 ### Middleware Integration
+
 ```python
 class ShreEventTrackingMiddleware:
     def __call__(self, request):

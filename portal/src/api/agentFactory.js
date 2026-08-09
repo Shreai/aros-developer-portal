@@ -37,10 +37,12 @@ const DEFAULT_BASE_URL = (() => {
 export function createAgentFactoryClient({
   baseUrl = DEFAULT_BASE_URL,
   token = '',
-  fetchImpl = (typeof fetch !== 'undefined' ? fetch : null),
+  fetchImpl = typeof fetch !== 'undefined' ? fetch : null,
 } = {}) {
   if (!fetchImpl) {
-    throw new Error('No fetch implementation available. Pass fetchImpl to createAgentFactoryClient.');
+    throw new Error(
+      'No fetch implementation available. Pass fetchImpl to createAgentFactoryClient.',
+    );
   }
 
   const base = baseUrl.replace(/\/$/, '');
@@ -70,7 +72,7 @@ export function createAgentFactoryClient({
     }
     if (!res.ok) {
       const err = new Error(
-        `Agent Factory API error ${res.status}: ${typeof data === 'object' ? JSON.stringify(data) : data}`
+        `Agent Factory API error ${res.status}: ${typeof data === 'object' ? JSON.stringify(data) : data}`,
       );
       err.status = res.status;
       err.data = data;

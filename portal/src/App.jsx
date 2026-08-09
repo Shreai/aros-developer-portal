@@ -3,12 +3,48 @@ import AgentsSection from './agents/AgentsSection.jsx';
 import ToolsSkillsSection from './agents/ToolsSkillsSection.jsx';
 
 const SDKS = [
-  { icon: '🟨', name: 'JavaScript / TypeScript', desc: 'Node.js, React, React Native, Electron, Browser', install: 'npm install @aros/pos-sdk', lang: 'javascript' },
-  { icon: '🐍', name: 'Python', desc: 'Linux servers, data pipelines, Django, Flask', install: 'pip install aros-pos-sdk', lang: 'python' },
-  { icon: '🟦', name: 'C# / .NET', desc: 'Windows POS, WPF, WinForms, .NET 6+', install: 'dotnet add package Aros.POS.SDK', lang: 'dotnet' },
-  { icon: '🍎', name: 'Swift (iOS/macOS)', desc: 'iOS POS apps, iPad registers, macOS', install: '.package(url: "...ArosPOS", from: "1.0.0")', lang: 'swift' },
-  { icon: '🤖', name: 'Kotlin (Android)', desc: 'Android POS devices, tablets, kiosks', install: 'implementation("com.aros:pos-sdk:1.0.0")', lang: 'kotlin' },
-  { icon: '🌐', name: 'REST API', desc: 'Any language — cURL, Go, Rust, PHP, Ruby', install: 'curl -X POST /v1/connexus/ingest', lang: 'rest' },
+  {
+    icon: '🟨',
+    name: 'JavaScript / TypeScript',
+    desc: 'Node.js, React, React Native, Electron, Browser',
+    install: 'npm install @aros/pos-sdk',
+    lang: 'javascript',
+  },
+  {
+    icon: '🐍',
+    name: 'Python',
+    desc: 'Linux servers, data pipelines, Django, Flask',
+    install: 'pip install aros-pos-sdk',
+    lang: 'python',
+  },
+  {
+    icon: '🟦',
+    name: 'C# / .NET',
+    desc: 'Windows POS, WPF, WinForms, .NET 6+',
+    install: 'dotnet add package Aros.POS.SDK',
+    lang: 'dotnet',
+  },
+  {
+    icon: '🍎',
+    name: 'Swift (iOS/macOS)',
+    desc: 'iOS POS apps, iPad registers, macOS',
+    install: '.package(url: "...ArosPOS", from: "1.0.0")',
+    lang: 'swift',
+  },
+  {
+    icon: '🤖',
+    name: 'Kotlin (Android)',
+    desc: 'Android POS devices, tablets, kiosks',
+    install: 'implementation("com.aros:pos-sdk:1.0.0")',
+    lang: 'kotlin',
+  },
+  {
+    icon: '🌐',
+    name: 'REST API',
+    desc: 'Any language — cURL, Go, Rust, PHP, Ruby',
+    install: 'curl -X POST /v1/connexus/ingest',
+    lang: 'rest',
+  },
 ];
 
 const VENDORS = [
@@ -31,17 +67,72 @@ const VENDORS = [
 ];
 
 const EVENTS = [
-  { method: 'itemScanned()', event: 'ItemSale', desc: 'Item scanned / added to cart', category: 'Sales' },
-  { method: 'quantityChanged()', event: 'qty_change', desc: 'Quantity +/- on cart item', category: 'Sales' },
-  { method: 'transactionComplete()', event: 'TransactionComplete', desc: 'Sale completed', category: 'Sales' },
-  { method: 'fuelDispensed()', event: 'FuelDispense', desc: 'Fuel pump completed', category: 'Sales' },
-  { method: 'voidLine()', event: 'VoidLine', desc: 'Single item voided', category: 'Loss Prevention' },
-  { method: 'voidTransaction()', event: 'VoidTransaction', desc: 'Entire transaction voided', category: 'Loss Prevention' },
-  { method: 'returnItem()', event: 'Return', desc: 'Item returned / refunded', category: 'Loss Prevention' },
-  { method: 'discountApplied()', event: 'Discount', desc: 'Discount applied (item or transaction)', category: 'Loss Prevention' },
-  { method: 'priceOverride()', event: 'PriceOverride', desc: 'Manual price change', category: 'Loss Prevention' },
-  { method: 'noSale()', event: 'NoSale', desc: 'Drawer opened without sale', category: 'Loss Prevention' },
-  { method: 'customerIdentified()', event: 'LoyaltySwipe', desc: 'Customer loyalty card scanned', category: 'Customer' },
+  {
+    method: 'itemScanned()',
+    event: 'ItemSale',
+    desc: 'Item scanned / added to cart',
+    category: 'Sales',
+  },
+  {
+    method: 'quantityChanged()',
+    event: 'qty_change',
+    desc: 'Quantity +/- on cart item',
+    category: 'Sales',
+  },
+  {
+    method: 'transactionComplete()',
+    event: 'TransactionComplete',
+    desc: 'Sale completed',
+    category: 'Sales',
+  },
+  {
+    method: 'fuelDispensed()',
+    event: 'FuelDispense',
+    desc: 'Fuel pump completed',
+    category: 'Sales',
+  },
+  {
+    method: 'voidLine()',
+    event: 'VoidLine',
+    desc: 'Single item voided',
+    category: 'Loss Prevention',
+  },
+  {
+    method: 'voidTransaction()',
+    event: 'VoidTransaction',
+    desc: 'Entire transaction voided',
+    category: 'Loss Prevention',
+  },
+  {
+    method: 'returnItem()',
+    event: 'Return',
+    desc: 'Item returned / refunded',
+    category: 'Loss Prevention',
+  },
+  {
+    method: 'discountApplied()',
+    event: 'Discount',
+    desc: 'Discount applied (item or transaction)',
+    category: 'Loss Prevention',
+  },
+  {
+    method: 'priceOverride()',
+    event: 'PriceOverride',
+    desc: 'Manual price change',
+    category: 'Loss Prevention',
+  },
+  {
+    method: 'noSale()',
+    event: 'NoSale',
+    desc: 'Drawer opened without sale',
+    category: 'Loss Prevention',
+  },
+  {
+    method: 'customerIdentified()',
+    event: 'LoyaltySwipe',
+    desc: 'Customer loyalty card scanned',
+    category: 'Customer',
+  },
 ];
 
 const CODE_EXAMPLES = {
@@ -268,20 +359,50 @@ function Header() {
   return (
     <header className="header">
       <div className="container">
-        <div className="logo">AROS <span>Developer Portal</span></div>
-        <button className="menu-toggle" onClick={() => setMenuOpen(!menuOpen)} aria-label="Toggle menu">
-          <span /><span /><span />
+        <div className="logo">
+          AROS <span>Developer Portal</span>
+        </div>
+        <button
+          className="menu-toggle"
+          onClick={() => setMenuOpen(!menuOpen)}
+          aria-label="Toggle menu"
+        >
+          <span />
+          <span />
+          <span />
         </button>
         <nav className={menuOpen ? 'open' : ''}>
-          <a href="#sdks" onClick={closeMenu}>SDKs</a>
-          <a href="#quickstart" onClick={closeMenu}>Quick Start</a>
-          <a href="#events" onClick={closeMenu}>Events</a>
-          <a href="#intelligence" onClick={closeMenu}>Intelligence</a>
-          <a href="#vendors" onClick={closeMenu}>POS Systems</a>
-          <a href="#architecture" onClick={closeMenu}>Architecture</a>
-          <a href="#agent-factory" onClick={closeMenu} style={{color: 'var(--accent)', fontWeight: 700}}>Agent Factory</a>
-          <a href="#tools-skills" onClick={closeMenu}>Tools &amp; Skills</a>
-          <a href="https://github.com/Nirpat3/aros-developer-portal" target="_blank" rel="noopener">GitHub</a>
+          <a href="#sdks" onClick={closeMenu}>
+            SDKs
+          </a>
+          <a href="#quickstart" onClick={closeMenu}>
+            Quick Start
+          </a>
+          <a href="#events" onClick={closeMenu}>
+            Events
+          </a>
+          <a href="#intelligence" onClick={closeMenu}>
+            Intelligence
+          </a>
+          <a href="#vendors" onClick={closeMenu}>
+            POS Systems
+          </a>
+          <a href="#architecture" onClick={closeMenu}>
+            Architecture
+          </a>
+          <a
+            href="#agent-factory"
+            onClick={closeMenu}
+            style={{ color: 'var(--accent)', fontWeight: 700 }}
+          >
+            Agent Factory
+          </a>
+          <a href="#tools-skills" onClick={closeMenu}>
+            Tools &amp; Skills
+          </a>
+          <a href="https://github.com/Nirpat3/aros-developer-portal" target="_blank" rel="noopener">
+            GitHub
+          </a>
         </nav>
       </div>
     </header>
@@ -292,16 +413,23 @@ function Hero() {
   return (
     <section className="hero">
       <div className="container">
-        <h1>Connect any <span>POS system</span> to AI</h1>
+        <h1>
+          Connect any <span>POS system</span> to AI
+        </h1>
         <p>
-          AROS POS SDKs bring real-time intelligence, upsell recommendations,
-          loss prevention, and cashier messaging to every register.
-          5 lines of code. Zero dependencies.
+          AROS POS SDKs bring real-time intelligence, upsell recommendations, loss prevention, and
+          cashier messaging to every register. 5 lines of code. Zero dependencies.
         </p>
         <div className="hero-actions">
-          <a href="#quickstart" className="btn btn-primary">Get Started</a>
-          <a href="#sdks" className="btn btn-outline">View SDKs</a>
-          <a href="/openapi.yaml" className="btn btn-outline">API Reference</a>
+          <a href="#quickstart" className="btn btn-primary">
+            Get Started
+          </a>
+          <a href="#sdks" className="btn btn-outline">
+            View SDKs
+          </a>
+          <a href="/openapi.yaml" className="btn btn-outline">
+            API Reference
+          </a>
         </div>
       </div>
     </section>
@@ -316,32 +444,49 @@ function Features() {
           <div className="feature">
             <div className="badge badge-green">Real-time</div>
             <h3>Upsell & Cross-sell</h3>
-            <p>AI-powered product recommendations based on co-purchase patterns. "72% of Corona buyers also grab limes."</p>
+            <p>
+              AI-powered product recommendations based on co-purchase patterns. "72% of Corona
+              buyers also grab limes."
+            </p>
           </div>
           <div className="feature">
             <div className="badge badge-blue">Intelligence</div>
             <h3>Customer Quick Order</h3>
-            <p>One-tap repeat orders from purchase history. Regular customers served in seconds, not minutes.</p>
+            <p>
+              One-tap repeat orders from purchase history. Regular customers served in seconds, not
+              minutes.
+            </p>
           </div>
           <div className="feature">
             <div className="badge badge-yellow">Prevention</div>
             <h3>Loss Prevention</h3>
-            <p>Track voids, returns, no-sales, price overrides. Victor AI agent detects patterns in real-time.</p>
+            <p>
+              Track voids, returns, no-sales, price overrides. Victor AI agent detects patterns in
+              real-time.
+            </p>
           </div>
           <div className="feature">
             <div className="badge badge-green">Messaging</div>
             <h3>Cashier Todo & Alerts</h3>
-            <p>Push messages to registers: restock alerts, shift notes, compliance reminders, low inventory warnings.</p>
+            <p>
+              Push messages to registers: restock alerts, shift notes, compliance reminders, low
+              inventory warnings.
+            </p>
           </div>
           <div className="feature">
             <div className="badge badge-blue">Offline-first</div>
             <h3>Queue & Auto-flush</h3>
-            <p>Events queue locally when offline and auto-flush on reconnect. Never blocks POS flow. Never loses data.</p>
+            <p>
+              Events queue locally when offline and auto-flush on reconnect. Never blocks POS flow.
+              Never loses data.
+            </p>
           </div>
           <div className="feature">
             <div className="badge badge-yellow">Standard</div>
             <h3>Connexus Protocol</h3>
-            <p>Industry-standard event format. Works with Verifone, NCR, Gilbarco, or any POS system.</p>
+            <p>
+              Industry-standard event format. Works with Verifone, NCR, Gilbarco, or any POS system.
+            </p>
           </div>
         </div>
       </div>
@@ -356,7 +501,7 @@ function SDKSection() {
         <h2>SDKs</h2>
         <p className="subtitle">Choose your platform. Same API everywhere.</p>
         <div className="sdk-grid">
-          {SDKS.map(sdk => (
+          {SDKS.map((sdk) => (
             <div key={sdk.lang} className="sdk-card">
               <div className="icon">{sdk.icon}</div>
               <h3>{sdk.name}</h3>
@@ -378,8 +523,12 @@ function QuickStart() {
         <h2>Quick Start</h2>
         <p className="subtitle">Full integration in under 10 lines of code.</p>
         <div className="tabs">
-          {SDKS.map(sdk => (
-            <button key={sdk.lang} className={`tab ${lang === sdk.lang ? 'active' : ''}`} onClick={() => setLang(sdk.lang)}>
+          {SDKS.map((sdk) => (
+            <button
+              key={sdk.lang}
+              className={`tab ${lang === sdk.lang ? 'active' : ''}`}
+              onClick={() => setLang(sdk.lang)}
+            >
               {sdk.icon} {sdk.name.split(' /')[0].split(' (')[0]}
             </button>
           ))}
@@ -398,13 +547,22 @@ function EventsSection() {
         <p className="subtitle">Every POS action becomes an AI training signal.</p>
         <table>
           <thead>
-            <tr><th>SDK Method</th><th>Event Type</th><th>Description</th><th>Category</th></tr>
+            <tr>
+              <th>SDK Method</th>
+              <th>Event Type</th>
+              <th>Description</th>
+              <th>Category</th>
+            </tr>
           </thead>
           <tbody>
-            {EVENTS.map(e => (
+            {EVENTS.map((e) => (
               <tr key={e.method}>
-                <td><code>{e.method}</code></td>
-                <td><code>{e.event}</code></td>
+                <td>
+                  <code>{e.method}</code>
+                </td>
+                <td>
+                  <code>{e.event}</code>
+                </td>
                 <td>{e.desc}</td>
                 <td>{e.category}</td>
               </tr>
@@ -425,8 +583,11 @@ function IntelligenceSection() {
         <div className="features">
           <div className="feature">
             <h3>POST /v1/pos/recommend</h3>
-            <p>Pass an itemId after scan. Returns co-purchase recommendations ranked by confidence. Learns from every basket.</p>
-            <pre style={{marginTop: 12, fontSize: 12}}>{`{
+            <p>
+              Pass an itemId after scan. Returns co-purchase recommendations ranked by confidence.
+              Learns from every basket.
+            </p>
+            <pre style={{ marginTop: 12, fontSize: 12 }}>{`{
   "itemId": "SKU-001",
   "recommendations": [
     { "target_description": "Lime 6pk",
@@ -437,8 +598,11 @@ function IntelligenceSection() {
           </div>
           <div className="feature">
             <h3>POST /v1/pos/quick-order</h3>
-            <p>Pass a customerId (loyalty card). Returns their most purchased items. One-tap ring-up for regulars.</p>
-            <pre style={{marginTop: 12, fontSize: 12}}>{`{
+            <p>
+              Pass a customerId (loyalty card). Returns their most purchased items. One-tap ring-up
+              for regulars.
+            </p>
+            <pre style={{ marginTop: 12, fontSize: 12 }}>{`{
   "customerId": "LYL-789",
   "items": [
     { "description": "Marlboro Gold",
@@ -449,8 +613,11 @@ function IntelligenceSection() {
           </div>
           <div className="feature">
             <h3>GET /v1/pos/messages/:deviceId</h3>
-            <p>Retrieve cashier todo items, alerts, shift notes. Push from MIB007 dashboard or AROS agents.</p>
-            <pre style={{marginTop: 12, fontSize: 12}}>{`{
+            <p>
+              Retrieve cashier todo items, alerts, shift notes. Push from MIB007 dashboard or AROS
+              agents.
+            </p>
+            <pre style={{ marginTop: 12, fontSize: 12 }}>{`{
   "messages": [
     { "type": "todo",
       "title": "Restock cooler #3",
@@ -470,13 +637,15 @@ function VendorSection() {
     <section id="vendors" className="section">
       <div className="container">
         <h2>Supported POS Systems</h2>
-        <p className="subtitle">16 vendors supported out of the box. Custom integrations via generic adapter.</p>
+        <p className="subtitle">
+          16 vendors supported out of the box. Custom integrations via generic adapter.
+        </p>
         <div className="vendor-grid">
-          {VENDORS.map(v => (
+          {VENDORS.map((v) => (
             <div key={v.id} className="vendor-card">
               <div className="name">{v.name}</div>
               <div className="id">{v.id}</div>
-              <div style={{fontSize: 11, color: 'var(--text-dim)', marginTop: 4}}>{v.type}</div>
+              <div style={{ fontSize: 11, color: 'var(--text-dim)', marginTop: 4 }}>{v.type}</div>
             </div>
           ))}
         </div>
@@ -491,7 +660,8 @@ function Architecture() {
       <div className="container">
         <h2>Architecture</h2>
         <p className="subtitle">How data flows from your register to AI intelligence and back.</p>
-        <div className="arch-diagram">{`Your POS System (any vendor)
+        <div className="arch-diagram">
+          {`Your POS System (any vendor)
     |
     v
 @aros/pos-sdk (JS, Python, C#, Swift, Kotlin, or REST)

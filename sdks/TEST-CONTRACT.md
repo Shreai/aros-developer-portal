@@ -41,11 +41,11 @@ Each endpoint validates:
 
 ### Test Count
 
-| Platform | Endpoint Tests | Integration | Total |
-|----------|---|---|---|
-| **Python** | 48 | 4 | **52** |
-| **.NET** | 36 | 1 | **37** |
-| **TOTAL** | 84 | 5 | **89** |
+| Platform   | Endpoint Tests | Integration | Total  |
+| ---------- | -------------- | ----------- | ------ |
+| **Python** | 48             | 4           | **52** |
+| **.NET**   | 36             | 1           | **37** |
+| **TOTAL**  | 84             | 5           | **89** |
 
 ---
 
@@ -286,12 +286,14 @@ Before shipping SDK changes, verify all tests pass:
 **Purpose:** Send batch of analytics events (read-only mode)
 
 **Headers:**
+
 - `x-shre-tenant` (required) — Tenant ID
 - `x-shre-app` (required) — App platform identifier
 - `Content-Type: application/json`
 - `Authorization` (not required for read-only)
 
 **Request Body:**
+
 ```json
 {
   "events": [
@@ -308,6 +310,7 @@ Before shipping SDK changes, verify all tests pass:
 ```
 
 **Response (200):**
+
 ```json
 {
   "accepted": 100,
@@ -318,6 +321,7 @@ Before shipping SDK changes, verify all tests pass:
 ```
 
 **Error Responses:**
+
 - `400 Bad Request` — Missing headers or invalid JSON
 - `401 Unauthorized` — Invalid JWT
 - `5xx Server Error` — Server-side issue
@@ -329,6 +333,7 @@ Before shipping SDK changes, verify all tests pass:
 **Purpose:** Authenticate and mint JWT token (read-write mode)
 
 **Headers:**
+
 - `x-shre-tenant` (required) — Tenant ID
 - `x-shre-app` (required) — Bootstrap key (public key for authentication)
 - `Content-Type: application/json`
@@ -336,6 +341,7 @@ Before shipping SDK changes, verify all tests pass:
 **Request Body:** Empty JSON object `{}`
 
 **Response (200):**
+
 ```json
 {
   "accessToken": "jwt_token_xyz789",
@@ -345,6 +351,7 @@ Before shipping SDK changes, verify all tests pass:
 ```
 
 **Error Responses:**
+
 - `400 Bad Request` — Missing headers
 - `401 Unauthorized` — Invalid bootstrap key
 - `5xx Server Error` — Server-side issue
@@ -356,11 +363,13 @@ Before shipping SDK changes, verify all tests pass:
 **Purpose:** Fetch SDK configuration for tenant
 
 **Headers:**
+
 - `x-shre-tenant` (required) — Tenant ID
 
 **Request Body:** None (GET method)
 
 **Response (200):**
+
 ```json
 {
   "trackingEnabled": true,
@@ -374,6 +383,7 @@ Before shipping SDK changes, verify all tests pass:
 ```
 
 **Error Responses:**
+
 - `400 Bad Request` — Missing headers
 - `401 Unauthorized` — Invalid tenant
 - `5xx Server Error` — Server-side issue
@@ -385,11 +395,13 @@ Before shipping SDK changes, verify all tests pass:
 **Purpose:** Send device liveness signal
 
 **Headers:**
+
 - `x-shre-tenant` (optional, can be in body) — Tenant ID
 - `x-shre-app` (optional) — App platform
 - `Content-Type: application/json`
 
 **Request Body:**
+
 ```json
 {
   "tenantId": "workspace_123",
@@ -401,6 +413,7 @@ Before shipping SDK changes, verify all tests pass:
 ```
 
 **Response (200):**
+
 ```json
 {
   "ok": true,
@@ -409,6 +422,7 @@ Before shipping SDK changes, verify all tests pass:
 ```
 
 **Error Responses:**
+
 - `400 Bad Request` — Invalid payload
 - `401 Unauthorized` — Invalid tenant
 - `5xx Server Error` — Server-side issue

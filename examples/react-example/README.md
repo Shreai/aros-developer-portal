@@ -29,11 +29,13 @@ npm run dev
 ## Integration Points
 
 The app sends events to:
+
 ```
 POST https://apiauth.shre.ai/v1/events/batch
 ```
 
 With headers:
+
 ```
 x-shre-tenant: dev-tenant-001
 x-shre-app: web

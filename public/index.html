@@ -1,93 +1,205 @@
 <!doctype html>
 <html>
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>AROS Customer Portal</title>
-  <style>body{font-family:ui-sans-serif,system-ui;margin:24px;max-width:900px}input,select,button{margin:4px;padding:8px}pre{background:#111;color:#0f0;padding:12px;min-height:180px;white-space:pre-wrap}</style>
-</head>
-<body>
-  <h1>AROS Customer Portal</h1>
-  <section>
-    <h3>Signup</h3>
-    <input id="email" placeholder="email" />
-    <input id="password" placeholder="password" />
-    <input id="name" placeholder="name" />
-    <input id="phone" placeholder="+1..." />
-    <select id="deploymentMode"><option>self_hosted</option><option>shared_hosted</option><option>dedicated_vps</option></select>
-    <select id="twoFactorMethod"><option>email_otp</option><option>sms_otp</option></select>
-    <button onclick="signup()">Signup</button>
-  </section>
-  <section>
-    <h3>2FA</h3>
-    <input id="challengeToken" placeholder="challengeToken" size="60" />
-    <input id="challengeJwt" placeholder="challengeJwt" size="60" />
-    <input id="code" placeholder="123456" />
-    <button onclick="verify2fa()">Verify 2FA</button>
-    <button onclick="resend2fa()">Resend 2FA</button>
-  </section>
-  <section>
-    <h3>License / Billing</h3>
-    <input id="authToken" placeholder="Bearer token (for protected endpoints)" size="60" />
-    <input id="workspaceId" placeholder="workspaceId" />
-    <select id="licenseMode"><option>self_hosted</option><option>dedicated_vps</option></select>
-    <button onclick="issueLicense()">Issue License</button>
-    <input id="licenseKey" placeholder="license key" size="60" />
-    <input id="fingerprint" placeholder="machine fingerprint" />
-    <button onclick="activateLicense()">Activate License</button>
-    <button onclick="licenseStatus()">License Status</button>
-    <button onclick="billingCheckout()">Stripe Checkout Session</button>
-    <button onclick="billingStatus()">Billing Status (Admin)</button>
-    <input id="billingWorkspaceId" placeholder="workspaceId (optional for list)" size="50" />
-  </section>
-  <section>
-    <h3>Superadmin Billing Ops</h3>
-    <input id="adminEmail" placeholder="customer email (optional if workspace owner exists)" size="50" />
-    <input id="invoiceId" placeholder="invoiceId (for retry payment)" size="50" />
-    <button onclick="billingDashboard()">Billing Dashboard / Reconciliation</button>
-    <button onclick="billingReconciliation()">Drift Reconciliation Scan</button>
-    <button onclick="retryInvoicePayment()">Retry Invoice Payment</button>
-    <button onclick="billingPasswordReset()">Issue Billing Password Reset</button>
-  </section>
-  <pre id="out"></pre>
-  <script>
-    const out = (v) => document.getElementById('out').textContent = typeof v === 'string' ? v : JSON.stringify(v, null, 2);
-    const auth = () => { const t=document.getElementById('authToken').value.trim(); return t?{Authorization:`Bearer ${t}`}:{}} ;
-    async function post(path,body,headers={}){const r=await fetch('/api'+path,{method:'POST',headers:{'Content-Type':'application/json',...headers},body:JSON.stringify(body)});return {status:r.status,data:await r.json().catch(()=>({}))};}
-    async function get(path,headers={}){const r=await fetch('/api'+path,{headers});return {status:r.status,data:await r.json().catch(()=>({}))};}
-    async function signup(){const res=await post('/v1/auth/signup',{email:email.value,password:password.value,name:name.value,phoneNumber:phone.value||undefined,deploymentMode:deploymentMode.value,twoFactorMethod:twoFactorMethod.value}); out(res); if(res.data?.challengeToken) challengeToken.value=res.data.challengeToken; if(res.data?.challengeJwt) challengeJwt.value=res.data.challengeJwt; if(res.data?.workspace?.id) workspaceId.value=res.data.workspace.id;}
-    async function verify2fa(){const res=await post('/v1/auth/verify-2fa',{challengeToken:challengeToken.value,challengeJwt:challengeJwt.value,code:code.value}); out(res); if(res.data?.token) authToken.value=res.data.token;}
-    async function resend2fa(){out(await post('/v1/auth/resend-2fa',{challengeToken:challengeToken.value,challengeJwt:challengeJwt.value}));}
-    async function issueLicense(){out(await post('/v1/auth/license/issue',{workspaceId:workspaceId.value,deploymentMode:licenseMode.value},auth()));}
-    async function activateLicense(){out(await post('/v1/auth/license/activate',{licenseKey:licenseKey.value,machineFingerprint:fingerprint.value||'demo-fp-1'}));}
-    async function licenseStatus(){out(await get('/v1/auth/license/status?licenseKey='+encodeURIComponent(licenseKey.value)));}
-    async function billingCheckout(){out(await post('/v1/auth/billing/checkout',{},auth()));}
-    async function billingStatus(){
-      const ws=(billingWorkspaceId.value||'').trim();
-      const q=ws?`?workspaceId=${encodeURIComponent(ws)}`:'?limit=50';
-      out(await get('/v1/auth/billing/status'+q,auth()));
-    }
-    async function billingDashboard(){
-      const ws=(billingWorkspaceId.value||'').trim();
-      const q=ws?`?workspaceId=${encodeURIComponent(ws)}&limit=50`:'?limit=50';
-      out(await get('/v1/auth/billing/admin/dashboard'+q,auth()));
-    }
-    async function billingPasswordReset(){
-      out(await post('/v1/auth/billing/admin/password-reset',{
-        workspaceId:(billingWorkspaceId.value||'').trim()||undefined,
-        email:(adminEmail.value||'').trim()||undefined
-      },auth()));
-    }
-    async function billingReconciliation(){
-      const ws=(billingWorkspaceId.value||'').trim();
-      const q=ws?`?workspaceId=${encodeURIComponent(ws)}&limit=200`:'?limit=200';
-      out(await get('/v1/auth/billing/admin/reconciliation'+q,auth()));
-    }
-    async function retryInvoicePayment(){
-      const id=(invoiceId.value||'').trim();
-      if(!id){ out({error:'invoiceId required'}); return; }
-      out(await post('/v1/auth/billing/admin/invoices/'+encodeURIComponent(id)+'/retry-payment',{},auth()));
-    }
-  </script>
-</body>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>AROS Customer Portal</title>
+    <style>
+      body {
+        font-family: ui-sans-serif, system-ui;
+        margin: 24px;
+        max-width: 900px;
+      }
+      input,
+      select,
+      button {
+        margin: 4px;
+        padding: 8px;
+      }
+      pre {
+        background: #111;
+        color: #0f0;
+        padding: 12px;
+        min-height: 180px;
+        white-space: pre-wrap;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>AROS Customer Portal</h1>
+    <section>
+      <h3>Signup</h3>
+      <input id="email" placeholder="email" />
+      <input id="password" placeholder="password" />
+      <input id="name" placeholder="name" />
+      <input id="phone" placeholder="+1..." />
+      <select id="deploymentMode">
+        <option>self_hosted</option>
+        <option>shared_hosted</option>
+        <option>dedicated_vps</option>
+      </select>
+      <select id="twoFactorMethod">
+        <option>email_otp</option>
+        <option>sms_otp</option>
+      </select>
+      <button onclick="signup()">Signup</button>
+    </section>
+    <section>
+      <h3>2FA</h3>
+      <input id="challengeToken" placeholder="challengeToken" size="60" />
+      <input id="challengeJwt" placeholder="challengeJwt" size="60" />
+      <input id="code" placeholder="123456" />
+      <button onclick="verify2fa()">Verify 2FA</button>
+      <button onclick="resend2fa()">Resend 2FA</button>
+    </section>
+    <section>
+      <h3>License / Billing</h3>
+      <input id="authToken" placeholder="Bearer token (for protected endpoints)" size="60" />
+      <input id="workspaceId" placeholder="workspaceId" />
+      <select id="licenseMode">
+        <option>self_hosted</option>
+        <option>dedicated_vps</option>
+      </select>
+      <button onclick="issueLicense()">Issue License</button>
+      <input id="licenseKey" placeholder="license key" size="60" />
+      <input id="fingerprint" placeholder="machine fingerprint" />
+      <button onclick="activateLicense()">Activate License</button>
+      <button onclick="licenseStatus()">License Status</button>
+      <button onclick="billingCheckout()">Stripe Checkout Session</button>
+      <button onclick="billingStatus()">Billing Status (Admin)</button>
+      <input id="billingWorkspaceId" placeholder="workspaceId (optional for list)" size="50" />
+    </section>
+    <section>
+      <h3>Superadmin Billing Ops</h3>
+      <input
+        id="adminEmail"
+        placeholder="customer email (optional if workspace owner exists)"
+        size="50"
+      />
+      <input id="invoiceId" placeholder="invoiceId (for retry payment)" size="50" />
+      <button onclick="billingDashboard()">Billing Dashboard / Reconciliation</button>
+      <button onclick="billingReconciliation()">Drift Reconciliation Scan</button>
+      <button onclick="retryInvoicePayment()">Retry Invoice Payment</button>
+      <button onclick="billingPasswordReset()">Issue Billing Password Reset</button>
+    </section>
+    <pre id="out"></pre>
+    <script>
+      const out = (v) =>
+        (document.getElementById('out').textContent =
+          typeof v === 'string' ? v : JSON.stringify(v, null, 2));
+      const auth = () => {
+        const t = document.getElementById('authToken').value.trim();
+        return t ? { Authorization: `Bearer ${t}` } : {};
+      };
+      async function post(path, body, headers = {}) {
+        const r = await fetch('/api' + path, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', ...headers },
+          body: JSON.stringify(body),
+        });
+        return { status: r.status, data: await r.json().catch(() => ({})) };
+      }
+      async function get(path, headers = {}) {
+        const r = await fetch('/api' + path, { headers });
+        return { status: r.status, data: await r.json().catch(() => ({})) };
+      }
+      async function signup() {
+        const res = await post('/v1/auth/signup', {
+          email: email.value,
+          password: password.value,
+          name: name.value,
+          phoneNumber: phone.value || undefined,
+          deploymentMode: deploymentMode.value,
+          twoFactorMethod: twoFactorMethod.value,
+        });
+        out(res);
+        if (res.data?.challengeToken) challengeToken.value = res.data.challengeToken;
+        if (res.data?.challengeJwt) challengeJwt.value = res.data.challengeJwt;
+        if (res.data?.workspace?.id) workspaceId.value = res.data.workspace.id;
+      }
+      async function verify2fa() {
+        const res = await post('/v1/auth/verify-2fa', {
+          challengeToken: challengeToken.value,
+          challengeJwt: challengeJwt.value,
+          code: code.value,
+        });
+        out(res);
+        if (res.data?.token) authToken.value = res.data.token;
+      }
+      async function resend2fa() {
+        out(
+          await post('/v1/auth/resend-2fa', {
+            challengeToken: challengeToken.value,
+            challengeJwt: challengeJwt.value,
+          }),
+        );
+      }
+      async function issueLicense() {
+        out(
+          await post(
+            '/v1/auth/license/issue',
+            { workspaceId: workspaceId.value, deploymentMode: licenseMode.value },
+            auth(),
+          ),
+        );
+      }
+      async function activateLicense() {
+        out(
+          await post('/v1/auth/license/activate', {
+            licenseKey: licenseKey.value,
+            machineFingerprint: fingerprint.value || 'demo-fp-1',
+          }),
+        );
+      }
+      async function licenseStatus() {
+        out(
+          await get('/v1/auth/license/status?licenseKey=' + encodeURIComponent(licenseKey.value)),
+        );
+      }
+      async function billingCheckout() {
+        out(await post('/v1/auth/billing/checkout', {}, auth()));
+      }
+      async function billingStatus() {
+        const ws = (billingWorkspaceId.value || '').trim();
+        const q = ws ? `?workspaceId=${encodeURIComponent(ws)}` : '?limit=50';
+        out(await get('/v1/auth/billing/status' + q, auth()));
+      }
+      async function billingDashboard() {
+        const ws = (billingWorkspaceId.value || '').trim();
+        const q = ws ? `?workspaceId=${encodeURIComponent(ws)}&limit=50` : '?limit=50';
+        out(await get('/v1/auth/billing/admin/dashboard' + q, auth()));
+      }
+      async function billingPasswordReset() {
+        out(
+          await post(
+            '/v1/auth/billing/admin/password-reset',
+            {
+              workspaceId: (billingWorkspaceId.value || '').trim() || undefined,
+              email: (adminEmail.value || '').trim() || undefined,
+            },
+            auth(),
+          ),
+        );
+      }
+      async function billingReconciliation() {
+        const ws = (billingWorkspaceId.value || '').trim();
+        const q = ws ? `?workspaceId=${encodeURIComponent(ws)}&limit=200` : '?limit=200';
+        out(await get('/v1/auth/billing/admin/reconciliation' + q, auth()));
+      }
+      async function retryInvoicePayment() {
+        const id = (invoiceId.value || '').trim();
+        if (!id) {
+          out({ error: 'invoiceId required' });
+          return;
+        }
+        out(
+          await post(
+            '/v1/auth/billing/admin/invoices/' + encodeURIComponent(id) + '/retry-payment',
+            {},
+            auth(),
+          ),
+        );
+      }
+    </script>
+  </body>
 </html>

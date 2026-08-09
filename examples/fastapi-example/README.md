@@ -21,18 +21,22 @@ python main.py
 ## API Endpoints
 
 ### Products
+
 - `GET /products` — List all products
 - `GET /products/{id}` — Get product details
 
 ### Orders
+
 - `POST /orders` — Create new order
 - `GET /orders/{id}` — Get order status
 
 ### Events
+
 - `GET /events` — View queued events
 - `POST /events/flush` — Manually flush to Shre
 
 ### Health
+
 - `GET /health` — Service health
 - `GET /readyz` — Ready check
 

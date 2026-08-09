@@ -11,30 +11,30 @@ npm install @shreai/sdk
 ## Quick start — read-only (default, no API key)
 
 ```ts
-import { ShreAI } from "@shreai/sdk";
+import { ShreAI } from '@shreai/sdk';
 
 ShreAI.init({
-  endpoint:        "https://apiauth.shre.ai", // auth/config plane (Mac)  — NOT api.shre.ai (that's docs)
-  eventsEndpoint:  "https://events.shre.ai",  // hot data plane (Hostinger). Optional — falls back to endpoint.
-  tenantId:        "merchant_123",
-  storeId:         "store_001",
-  userId:          "user_789",
-  role:            "manager",
-  app:             "rapid_bos",
-  mode:            "read_only"                // default
+  endpoint: 'https://apiauth.shre.ai', // auth/config plane (Mac)  — NOT api.shre.ai (that's docs)
+  eventsEndpoint: 'https://events.shre.ai', // hot data plane (Hostinger). Optional — falls back to endpoint.
+  tenantId: 'merchant_123',
+  storeId: 'store_001',
+  userId: 'user_789',
+  role: 'manager',
+  app: 'rapid_bos',
+  mode: 'read_only', // default
 });
 
 // Do NOT use downloads.shre.ai for either — that's the SDK download host (Cloudflare Pages).
 // The SDK refuses to initialize against `downloads.*` hostnames to prevent the 1033 trap.
 
 // Track screen views
-ShreAI.trackScreen("ItemEdit");
+ShreAI.trackScreen('ItemEdit');
 
 // Track structured events
-ShreAI.trackEvent("price_updated", {
-  entityType: "item",
-  entityId:   "UPC_012345678905",
-  metadata: { oldValue: 10.49, newValue: 10.99 }
+ShreAI.trackEvent('price_updated', {
+  entityType: 'item',
+  entityId: 'UPC_012345678905',
+  metadata: { oldValue: 10.49, newValue: 10.99 },
 });
 ```
 
@@ -42,12 +42,12 @@ ShreAI.trackEvent("price_updated", {
 
 ```ts
 ShreAI.init({
-  endpoint:       "https://apiauth.shre.ai",
-  eventsEndpoint: "https://events.shre.ai",
-  tenantId:       "merchant_123",
-  app:            "rapid_bos",
-  mode:           "read_write",
-  bootstrapKey:   "<your_public_sdk_key>"   // request from Shre AI ops
+  endpoint: 'https://apiauth.shre.ai',
+  eventsEndpoint: 'https://events.shre.ai',
+  tenantId: 'merchant_123',
+  app: 'rapid_bos',
+  mode: 'read_write',
+  bootstrapKey: '<your_public_sdk_key>', // request from Shre AI ops
 });
 ```
 
@@ -78,44 +78,52 @@ NOTE: api.shre.ai now serves API documentation only — do not configure the SDK
 
 ## Endpoints used
 
-| Verb  | Path                  | Auth                 | Why                                         |
-| ----- | --------------------- | -------------------- | ------------------------------------------- |
-| POST  | `/v1/sdk/session`     | bootstrapKey (rw)    | Mint short-lived JWT (rw) or fetch config   |
-| GET   | `/v1/sdk/config`      | none                 | Kill switch, disabled events, runtime tunes |
-| POST  | `/v1/events/batch`    | JWT (rw) / none (ro) | Main ingest path                            |
-| POST  | `/v1/sdk/heartbeat`   | none                 | Liveness + queue depth (optional)           |
+| Verb | Path                | Auth                 | Why                                         |
+| ---- | ------------------- | -------------------- | ------------------------------------------- |
+| POST | `/v1/sdk/session`   | bootstrapKey (rw)    | Mint short-lived JWT (rw) or fetch config   |
+| GET  | `/v1/sdk/config`    | none                 | Kill switch, disabled events, runtime tunes |
+| POST | `/v1/events/batch`  | JWT (rw) / none (ro) | Main ingest path                            |
+| POST | `/v1/sdk/heartbeat` | none                 | Liveness + queue depth (optional)           |
 
 ## Config knobs
 
 ```ts
 ShreAI.init({
   // required
-  endpoint, tenantId, app,
+  endpoint,
+  tenantId,
+  app,
 
   // optional
-  storeId, userId, role,
-  mode: "read_only" | "read_write",          // default: read_only
-  bootstrapKey,                              // required if mode = read_write
-  flushIntervalSeconds: 10,                  // server may override
-  batchSize: 50,                             // server may override
+  storeId,
+  userId,
+  role,
+  mode: 'read_only' | 'read_write', // default: read_only
+  bootstrapKey, // required if mode = read_write
+  flushIntervalSeconds: 10, // server may override
+  batchSize: 50, // server may override
   maxQueueSize: 5000,
   timeoutMs: 8_000,
-  fetchFn,                                   // for React Native or Node 18-
+  fetchFn, // for React Native or Node 18-
 
-  onError: (err, ctx) => { /* … */ },
-  onFlush: (sent, failed) => { /* … */ }
+  onError: (err, ctx) => {
+    /* … */
+  },
+  onFlush: (sent, failed) => {
+    /* … */
+  },
 });
 ```
 
 ## Failure handling
 
-| Status         | SDK reaction                                                |
-| -------------- | ----------------------------------------------------------- |
-| 401            | Re-bootstrap session (refresh JWT)                          |
-| 403            | Disable tracking locally (kill switch)                      |
-| 429            | Backoff: 5s → 15s → 30s → 60s → 5min                       |
-| 5xx            | Same backoff schedule; events stay in local queue           |
-| network offline| Events stay in queue until upload succeeds                  |
+| Status          | SDK reaction                                      |
+| --------------- | ------------------------------------------------- |
+| 401             | Re-bootstrap session (refresh JWT)                |
+| 403             | Disable tracking locally (kill switch)            |
+| 429             | Backoff: 5s → 15s → 30s → 60s → 5min              |
+| 5xx             | Same backoff schedule; events stay in local queue |
+| network offline | Events stay in queue until upload succeeds        |
 
 The SDK guarantees event ordering on retry. Every event has a client-generated `eventId` so the server upserts on conflict — your retries will not double-write.
 

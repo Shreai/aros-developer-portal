@@ -23,16 +23,19 @@ dotnet run
 ## API Endpoints
 
 ### Products
+
 - `GET /api/products` — List all products
 - `GET /api/products/{id}` — Get product details
 
 ### Orders
+
 - `POST /api/orders` — Create new order
 - `GET /api/orders/{orderId}` — Get order status
 - `GET /api/orders/queue/status` — View queued events
 - `POST /api/orders/queue/flush` — Manually flush events
 
 ### Health
+
 - `GET /health` — Service health
 - `GET /readyz` — Ready check
 

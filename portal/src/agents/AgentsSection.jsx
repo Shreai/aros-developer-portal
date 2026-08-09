@@ -26,7 +26,10 @@ function BackendUnavailable({ error, onRetry }) {
       <h3>Agent Factory backend unavailable</h3>
       <p>
         The backend at{' '}
-        <code>{(typeof import.meta !== 'undefined' && import.meta.env?.VITE_AGENT_FACTORY_URL) || 'http://localhost:8080/api/v1'}</code>{' '}
+        <code>
+          {(typeof import.meta !== 'undefined' && import.meta.env?.VITE_AGENT_FACTORY_URL) ||
+            'http://localhost:8080/api/v1'}
+        </code>{' '}
         could not be reached.
       </p>
       {error && <pre className="af-error-detail">{error}</pre>}
@@ -55,11 +58,7 @@ function ErrorBanner({ message, onDismiss }) {
 }
 
 function JsonResult({ data }) {
-  return (
-    <pre className="af-json-result">
-      {JSON.stringify(data, null, 2)}
-    </pre>
-  );
+  return <pre className="af-json-result">{JSON.stringify(data, null, 2)}</pre>;
 }
 
 // ── Token settings panel ───────────────────────────────────────────────────────
@@ -78,14 +77,20 @@ function TokenPanel({ token, setToken }) {
           type="password"
           className="af-input af-token-input"
           value={draft}
-          onChange={(e) => { setDraft(e.target.value); setSaved(false); }}
+          onChange={(e) => {
+            setDraft(e.target.value);
+            setSaved(false);
+          }}
           placeholder="Bearer token (optional)"
           autoComplete="off"
         />
         <button
           className="btn btn-primary"
           style={{ marginLeft: 8 }}
-          onClick={() => { setToken(draft); setSaved(true); }}
+          onClick={() => {
+            setToken(draft);
+            setSaved(true);
+          }}
         >
           Save
         </button>
@@ -113,7 +118,15 @@ const KNOWN_MODELS = [
 
 const EMPTY_FORM = { name: '', role: '', description: '', model: 'gpt-4o', tools: [], skills: [] };
 
-function AgentForm({ initial, availableTools, availableSkills, onSubmit, onCancel, loading, error }) {
+function AgentForm({
+  initial,
+  availableTools,
+  availableSkills,
+  onSubmit,
+  onCancel,
+  loading,
+  error,
+}) {
   const [form, setForm] = useState(initial || EMPTY_FORM);
 
   function field(key) {
@@ -141,7 +154,9 @@ function AgentForm({ initial, availableTools, availableSkills, onSubmit, onCance
       <ErrorBanner message={error} />
 
       <div className="af-field">
-        <label className="af-label" htmlFor="af-name">Agent name *</label>
+        <label className="af-label" htmlFor="af-name">
+          Agent name *
+        </label>
         <input
           id="af-name"
           className="af-input"
@@ -154,7 +169,9 @@ function AgentForm({ initial, availableTools, availableSkills, onSubmit, onCance
       </div>
 
       <div className="af-field">
-        <label className="af-label" htmlFor="af-role">Role</label>
+        <label className="af-label" htmlFor="af-role">
+          Role
+        </label>
         <input
           id="af-role"
           className="af-input"
@@ -166,7 +183,9 @@ function AgentForm({ initial, availableTools, availableSkills, onSubmit, onCance
       </div>
 
       <div className="af-field">
-        <label className="af-label" htmlFor="af-description">Description</label>
+        <label className="af-label" htmlFor="af-description">
+          Description
+        </label>
         <textarea
           id="af-description"
           className="af-input af-textarea"
@@ -179,7 +198,9 @@ function AgentForm({ initial, availableTools, availableSkills, onSubmit, onCance
       </div>
 
       <div className="af-field">
-        <label className="af-label" htmlFor="af-model">Model</label>
+        <label className="af-label" htmlFor="af-model">
+          Model
+        </label>
         <select
           id="af-model"
           className="af-input af-select"
@@ -188,7 +209,9 @@ function AgentForm({ initial, availableTools, availableSkills, onSubmit, onCance
           disabled={loading}
         >
           {KNOWN_MODELS.map((m) => (
-            <option key={m} value={m}>{m}</option>
+            <option key={m} value={m}>
+              {m}
+            </option>
           ))}
         </select>
       </div>
@@ -277,7 +300,9 @@ function RunPanel({ agentId, client }) {
     <div className="af-run-panel">
       <h4 className="af-panel-title">Run agent</h4>
       <div className="af-field">
-        <label className="af-label" htmlFor="af-run-input">Input (optional)</label>
+        <label className="af-label" htmlFor="af-run-input">
+          Input (optional)
+        </label>
         <textarea
           id="af-run-input"
           className="af-input af-textarea"
@@ -355,7 +380,9 @@ function AgentDetail({ agentId, availableTools, availableSkills, client, onBack,
     }
   }, [agentId, client]);
 
-  useEffect(() => { load(); }, [load]);
+  useEffect(() => {
+    load();
+  }, [load]);
 
   async function handleUpdate(form) {
     setSaving(true);
@@ -379,7 +406,9 @@ function AgentDetail({ agentId, availableTools, availableSkills, client, onBack,
   return (
     <div>
       <div className="af-detail-header">
-        <button className="af-back-btn" onClick={onBack}>← Agents</button>
+        <button className="af-back-btn" onClick={onBack}>
+          ← Agents
+        </button>
         <h3 className="af-detail-title">{agent.name}</h3>
         <div className="af-detail-meta">
           {agent.role && <span className="af-badge">{agent.role}</span>}
@@ -444,7 +473,10 @@ function AgentDetail({ agentId, availableTools, availableSkills, client, onBack,
           availableTools={availableTools}
           availableSkills={availableSkills}
           onSubmit={handleUpdate}
-          onCancel={() => { setEditing(false); setSaveError(''); }}
+          onCancel={() => {
+            setEditing(false);
+            setSaveError('');
+          }}
           loading={saving}
           error={saveError}
         />
@@ -471,14 +503,22 @@ function AgentList({ agents, onSelect, onCreate }) {
       {agents.map((a) => {
         const id = a.id || a.name;
         return (
-          <div key={id} className="af-list-item" onClick={() => onSelect(id)} tabIndex={0}
-            onKeyDown={(e) => e.key === 'Enter' && onSelect(id)}>
+          <div
+            key={id}
+            className="af-list-item"
+            onClick={() => onSelect(id)}
+            tabIndex={0}
+            onKeyDown={(e) => e.key === 'Enter' && onSelect(id)}
+          >
             <div className="af-list-item-name">{a.name}</div>
             <div className="af-list-item-meta">
               {a.role && <span className="af-badge">{a.role}</span>}
               {a.model && <code className="af-model-tag">{a.model}</code>}
               {a.description && (
-                <span className="af-list-item-desc">{a.description.slice(0, 80)}{a.description.length > 80 ? '…' : ''}</span>
+                <span className="af-list-item-desc">
+                  {a.description.slice(0, 80)}
+                  {a.description.length > 80 ? '…' : ''}
+                </span>
               )}
             </div>
           </div>
@@ -524,7 +564,12 @@ export default function AgentsSection() {
       if (agentsData.status === 'rejected') {
         const err = agentsData.reason;
         const msg = err.message || String(err);
-        if (msg.includes('ECONNREFUSED') || msg.includes('fetch') || msg.includes('network') || msg.includes('Failed to fetch')) {
+        if (
+          msg.includes('ECONNREFUSED') ||
+          msg.includes('fetch') ||
+          msg.includes('network') ||
+          msg.includes('Failed to fetch')
+        ) {
           setUnavailable(true);
         } else {
           setLoadError(msg);
@@ -535,14 +580,22 @@ export default function AgentsSection() {
       }
 
       // Tools and skills are supplemental — degrade gracefully
-      setTools(toolsData.status === 'fulfilled' && Array.isArray(toolsData.value) ? toolsData.value : []);
-      setSkills(skillsData.status === 'fulfilled' && Array.isArray(skillsData.value) ? skillsData.value : []);
+      setTools(
+        toolsData.status === 'fulfilled' && Array.isArray(toolsData.value) ? toolsData.value : [],
+      );
+      setSkills(
+        skillsData.status === 'fulfilled' && Array.isArray(skillsData.value)
+          ? skillsData.value
+          : [],
+      );
     } finally {
       setLoading(false);
     }
   }, [client]);
 
-  useEffect(() => { loadAll(); }, [loadAll]);
+  useEffect(() => {
+    loadAll();
+  }, [loadAll]);
 
   async function handleCreate(form) {
     setCreating(true);
@@ -608,7 +661,9 @@ export default function AgentsSection() {
           </>
         ) : view === 'new' ? (
           <div>
-            <button className="af-back-btn" onClick={goList}>← Agents</button>
+            <button className="af-back-btn" onClick={goList}>
+              ← Agents
+            </button>
             <h3 style={{ marginBottom: 24 }}>Create new agent</h3>
             <AgentForm
               initial={EMPTY_FORM}

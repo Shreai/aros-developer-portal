@@ -54,13 +54,13 @@ sdk.sendEventsBatch(events: [
 
 ## Features
 
-| Feature | Status | Details |
-|---------|--------|---------|
-| **Read-Only Mode** | ✓ | No auth required, for analytics capture |
-| **Read-Write Mode** | ✓ | JWT authentication, requires bootstrap key |
-| **Event Batching** | ✓ | Send up to 100 events per batch |
-| **Configuration** | ✓ | Per-tenant settings (flush interval, batch size) |
-| **Liveness Tracking** | ✓ | Heartbeat signal with queue depth |
+| Feature               | Status | Details                                          |
+| --------------------- | ------ | ------------------------------------------------ |
+| **Read-Only Mode**    | ✓      | No auth required, for analytics capture          |
+| **Read-Write Mode**   | ✓      | JWT authentication, requires bootstrap key       |
+| **Event Batching**    | ✓      | Send up to 100 events per batch                  |
+| **Configuration**     | ✓      | Per-tenant settings (flush interval, batch size) |
+| **Liveness Tracking** | ✓      | Heartbeat signal with queue depth                |
 
 ---
 
@@ -288,15 +288,15 @@ sdk.sendEventsBatch(events: events) { result in
 
 ### Required Headers
 
-| Header | Value | Example |
-|--------|-------|---------|
+| Header          | Value     | Example      |
+| --------------- | --------- | ------------ |
 | `x-shre-tenant` | Tenant ID | `client-123` |
-| `x-shre-app` | Platform | `ios` |
+| `x-shre-app`    | Platform  | `ios`        |
 
 ### Optional Headers
 
-| Header | Value | Use |
-|--------|-------|-----|
+| Header          | Value      | Use                 |
+| --------------- | ---------- | ------------------- |
 | `Authorization` | Bearer JWT | For read-write mode |
 
 ---
@@ -314,6 +314,7 @@ sdk.sendEventsBatch(events: events) { result in
 ## Changelog
 
 ### v2.0.0 (May 2, 2026)
+
 - Initial stable release
 - All 4 endpoints locked
 - 6-month backward compatibility guarantee

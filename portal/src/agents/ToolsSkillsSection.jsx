@@ -55,7 +55,11 @@ function ItemCard({ item }) {
   return (
     <div className="af-item-card">
       <div className="af-item-name">{name}</div>
-      {version && <span className="af-badge" style={{ marginBottom: 6 }}>v{version}</span>}
+      {version && (
+        <span className="af-badge" style={{ marginBottom: 6 }}>
+          v{version}
+        </span>
+      )}
       {description && <p className="af-item-desc">{description}</p>}
       <div className="af-item-meta">
         {Object.entries(item)
@@ -94,7 +98,8 @@ function AddForm({ label, fields, onSubmit, onCancel, loading, error }) {
       {fields.map((f) => (
         <div key={f.key} className="af-field">
           <label className="af-label" htmlFor={`af-add-${f.key}`}>
-            {f.label}{f.required ? ' *' : ''}
+            {f.label}
+            {f.required ? ' *' : ''}
           </label>
           {f.type === 'textarea' ? (
             <textarea
@@ -133,14 +138,24 @@ function AddForm({ label, fields, onSubmit, onCancel, loading, error }) {
 
 const TOOL_FIELDS = [
   { key: 'name', label: 'Tool name', required: true, placeholder: 'e.g. web_search' },
-  { key: 'description', label: 'Description', type: 'textarea', placeholder: 'What this tool does' },
+  {
+    key: 'description',
+    label: 'Description',
+    type: 'textarea',
+    placeholder: 'What this tool does',
+  },
   { key: 'endpoint', label: 'Endpoint URL', placeholder: 'https://...' },
 ];
 
 const SKILL_FIELDS = [
   { key: 'name', label: 'Skill name', required: true, placeholder: 'e.g. reasoning' },
   { key: 'version', label: 'Version', placeholder: '1.0.0' },
-  { key: 'description', label: 'Description', type: 'textarea', placeholder: 'What this skill provides' },
+  {
+    key: 'description',
+    label: 'Description',
+    type: 'textarea',
+    placeholder: 'What this skill provides',
+  },
 ];
 
 // ── Tab panel ─────────────────────────────────────────────────────────────────
@@ -155,7 +170,10 @@ function TabPanel({ type, items, fields, onCreate, loading, saving, saveError })
   return (
     <div>
       <div className="af-tab-header">
-        <span className="af-tab-count">{items.length} {type}{items.length !== 1 ? 's' : ''}</span>
+        <span className="af-tab-count">
+          {items.length} {type}
+          {items.length !== 1 ? 's' : ''}
+        </span>
         {!adding && (
           <button className="btn btn-outline" onClick={() => setAdding(true)}>
             + Add {type}
@@ -216,21 +234,31 @@ export default function ToolsSkillsSection() {
       const failed = toolsRes.status === 'rejected' && skillsRes.status === 'rejected';
       if (failed) {
         const msg = toolsRes.reason?.message || String(toolsRes.reason);
-        if (msg.includes('ECONNREFUSED') || msg.includes('fetch') || msg.includes('Failed to fetch')) {
+        if (
+          msg.includes('ECONNREFUSED') ||
+          msg.includes('fetch') ||
+          msg.includes('Failed to fetch')
+        ) {
           setUnavailable(true);
         } else {
           setLoadError(msg);
         }
       }
 
-      setTools(toolsRes.status === 'fulfilled' && Array.isArray(toolsRes.value) ? toolsRes.value : []);
-      setSkills(skillsRes.status === 'fulfilled' && Array.isArray(skillsRes.value) ? skillsRes.value : []);
+      setTools(
+        toolsRes.status === 'fulfilled' && Array.isArray(toolsRes.value) ? toolsRes.value : [],
+      );
+      setSkills(
+        skillsRes.status === 'fulfilled' && Array.isArray(skillsRes.value) ? skillsRes.value : [],
+      );
     } finally {
       setLoading(false);
     }
   }, [client]);
 
-  useEffect(() => { loadAll(); }, [loadAll]);
+  useEffect(() => {
+    loadAll();
+  }, [loadAll]);
 
   async function handleCreateTool(form, done) {
     setSaving(true);

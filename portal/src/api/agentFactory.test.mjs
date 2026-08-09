@@ -39,9 +39,7 @@ function makeCapturingFetch(status = 200, body = {}) {
 
 describe('createAgentFactoryClient', () => {
   it('throws if no fetch implementation is available', () => {
-    expect(() => createAgentFactoryClient({ fetchImpl: null })).toThrow(
-      /No fetch implementation/
-    );
+    expect(() => createAgentFactoryClient({ fetchImpl: null })).toThrow(/No fetch implementation/);
   });
 
   it('strips a trailing slash from baseUrl', async () => {
@@ -96,7 +94,10 @@ describe('Agents endpoints', () => {
 
   it('listAgents — GET /agents', async () => {
     mockFetch = makeCapturingFetch(200, [{ id: '1', name: 'TestAgent' }]);
-    const c = createAgentFactoryClient({ baseUrl: 'http://localhost:8080/api/v1', fetchImpl: mockFetch });
+    const c = createAgentFactoryClient({
+      baseUrl: 'http://localhost:8080/api/v1',
+      fetchImpl: mockFetch,
+    });
     const result = await c.listAgents();
     expect(mockFetch.calls[0].url).toBe('http://localhost:8080/api/v1/agents');
     expect(mockFetch.calls[0].opts.method).toBe('GET');
@@ -193,7 +194,9 @@ describe('Error handling', () => {
   it('propagates network errors (backend unreachable)', async () => {
     const client = createAgentFactoryClient({
       baseUrl: 'http://localhost:8080/api/v1',
-      fetchImpl: async () => { throw new Error('ECONNREFUSED'); },
+      fetchImpl: async () => {
+        throw new Error('ECONNREFUSED');
+      },
     });
     await expect(client.listAgents()).rejects.toThrow('ECONNREFUSED');
   });

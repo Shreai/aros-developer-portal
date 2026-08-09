@@ -12,12 +12,24 @@
       "types": "./dist/index.d.ts"
     }
   },
-  "files": ["dist", "README.md"],
+  "files": [
+    "dist",
+    "README.md"
+  ],
   "scripts": {
     "build": "tsc",
     "typecheck": "tsc --noEmit"
   },
-  "keywords": ["pos", "retail", "aros", "shre", "connexus", "verifone", "ncr", "gilbarco"],
+  "keywords": [
+    "pos",
+    "retail",
+    "aros",
+    "shre",
+    "connexus",
+    "verifone",
+    "ncr",
+    "gilbarco"
+  ],
   "license": "MIT",
   "devDependencies": {
     "typescript": "^5.4.0"

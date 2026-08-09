@@ -14,11 +14,13 @@ Working Android application with Jetpack Compose demonstrating Shre SDK integrat
 ## Running
 
 ### Prerequisites
+
 - Android Studio 2023.2+
 - Android SDK 24+ (target 34)
 - Kotlin 1.9.22+
 
 ### Build & Run
+
 ```bash
 cd aros-developer-portal/examples/android-example
 ./gradlew build
@@ -29,11 +31,13 @@ cd aros-developer-portal/examples/android-example
 ## App Structure
 
 ### Tabs
+
 1. **Products** — Browse catalog, track views
 2. **Cart** — View items, checkout
 3. **Events** — Real-time event log
 
 ### Events Tracked
+
 - `product_view` — When user views a product
 - `cart_add` — When item added to cart
 - `purchase` — When checkout completed
@@ -41,6 +45,7 @@ cd aros-developer-portal/examples/android-example
 ## Integration Points
 
 ### ViewModel with SDK
+
 ```kotlin
 class EventViewModel(application: Application) : AndroidViewModel(application) {
     private val sdk = ShreSDK("dev-tenant-001")
@@ -57,6 +62,7 @@ class EventViewModel(application: Application) : AndroidViewModel(application) {
 ```
 
 ### Compose Integration
+
 ```kotlin
 @Composable
 fun ProductCard(product: Product, onAction: (Product, String) -> Unit) {

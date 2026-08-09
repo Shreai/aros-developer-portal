@@ -179,8 +179,11 @@ class SDKImpl {
     }
 
     this.cfg = { mode: 'read_only', ...cfg };
-    const f = cfg.fetchFn || (typeof globalThis.fetch === 'function' ? globalThis.fetch.bind(globalThis) : undefined);
-    if (!f) throw new Error('ShreAI: no fetch available — pass fetchFn for older Node/React Native');
+    const f =
+      cfg.fetchFn ||
+      (typeof globalThis.fetch === 'function' ? globalThis.fetch.bind(globalThis) : undefined);
+    if (!f)
+      throw new Error('ShreAI: no fetch available — pass fetchFn for older Node/React Native');
     this.fetchFn = f;
     this.baseUrl = cfg.endpoint.replace(/\/$/, '');
     this.eventsBaseUrl = (cfg.eventsEndpoint || cfg.endpoint).replace(/\/$/, '');
@@ -244,7 +247,8 @@ class SDKImpl {
       expiresAt: Math.floor(Date.now() / 1000) + (data.expiresIn ?? 3600),
     };
     this.remoteConfig.trackingEnabled = data.trackingEnabled;
-    this.remoteConfig.flushIntervalSeconds = data.flushIntervalSeconds ?? this.remoteConfig.flushIntervalSeconds;
+    this.remoteConfig.flushIntervalSeconds =
+      data.flushIntervalSeconds ?? this.remoteConfig.flushIntervalSeconds;
     this.remoteConfig.batchSize = data.batchSize ?? this.remoteConfig.batchSize;
     // Also pull /sdk/config for kill-switch + disabled events
     await this.refreshRemoteConfig().catch(() => {});
@@ -286,10 +290,20 @@ class SDKImpl {
 
   async flush(): Promise<BatchAck> {
     if (this.queue.length === 0) {
-      return { accepted: 0, rejected: 0, trackingEnabled: this.remoteConfig.trackingEnabled, nextFlushSeconds: this.remoteConfig.flushIntervalSeconds };
+      return {
+        accepted: 0,
+        rejected: 0,
+        trackingEnabled: this.remoteConfig.trackingEnabled,
+        nextFlushSeconds: this.remoteConfig.flushIntervalSeconds,
+      };
     }
     if (this.inFlight) {
-      return { accepted: 0, rejected: 0, trackingEnabled: this.remoteConfig.trackingEnabled, nextFlushSeconds: this.remoteConfig.flushIntervalSeconds };
+      return {
+        accepted: 0,
+        rejected: 0,
+        trackingEnabled: this.remoteConfig.trackingEnabled,
+        nextFlushSeconds: this.remoteConfig.flushIntervalSeconds,
+      };
     }
     this.inFlight = true;
     const batch = this.queue.splice(0, this.remoteConfig.batchSize);
@@ -298,7 +312,10 @@ class SDKImpl {
       this.retryAttempt = 0;
       this.cfg.onFlush?.(ack.accepted, ack.rejected);
       // Adapt local interval if server suggests one
-      if (ack.nextFlushSeconds > 0 && ack.nextFlushSeconds !== this.remoteConfig.flushIntervalSeconds) {
+      if (
+        ack.nextFlushSeconds > 0 &&
+        ack.nextFlushSeconds !== this.remoteConfig.flushIntervalSeconds
+      ) {
         this.remoteConfig.flushIntervalSeconds = ack.nextFlushSeconds;
         this.restartFlushTimer();
       }
@@ -318,7 +335,12 @@ class SDKImpl {
         this.scheduleBackoff();
       }
       this.cfg.onFlush?.(0, batch.length);
-      return { accepted: 0, rejected: batch.length, trackingEnabled: this.remoteConfig.trackingEnabled, nextFlushSeconds: this.remoteConfig.flushIntervalSeconds };
+      return {
+        accepted: 0,
+        rejected: batch.length,
+        trackingEnabled: this.remoteConfig.trackingEnabled,
+        nextFlushSeconds: this.remoteConfig.flushIntervalSeconds,
+      };
     } finally {
       this.inFlight = false;
     }
@@ -326,7 +348,10 @@ class SDKImpl {
 
   private async postBatch(events: QueuedEvent[]): Promise<BatchAck> {
     // Refresh token if close to expiry (read_write only)
-    if (this.cfg.mode === 'read_write' && this.session.expiresAt - Math.floor(Date.now() / 1000) < 60) {
+    if (
+      this.cfg.mode === 'read_write' &&
+      this.session.expiresAt - Math.floor(Date.now() / 1000) < 60
+    ) {
       await this.bootstrap();
     }
     const res = await this.fetchFn(`${this.eventsBaseUrl}/v1/events/batch`, {
@@ -337,7 +362,9 @@ class SDKImpl {
     });
     if (!res.ok) {
       const text = await res.text().catch(() => '');
-      const err = new Error(`batch ${res.status}: ${text.slice(0, 200)}`) as Error & { status: number };
+      const err = new Error(`batch ${res.status}: ${text.slice(0, 200)}`) as Error & {
+        status: number;
+      };
       err.status = res.status;
       throw err;
     }
@@ -415,9 +442,13 @@ class SDKImpl {
     globalThis.addEventListener('beforeunload', () => {
       // best-effort sync flush via sendBeacon if available
       if (this.queue.length === 0) return;
-      const g = globalThis as unknown as { navigator?: { sendBeacon?: (u: string, b: BodyInit) => boolean } };
+      const g = globalThis as unknown as {
+        navigator?: { sendBeacon?: (u: string, b: BodyInit) => boolean };
+      };
       if (g.navigator?.sendBeacon) {
-        const blob = new Blob([JSON.stringify({ events: this.queue })], { type: 'application/json' });
+        const blob = new Blob([JSON.stringify({ events: this.queue })], {
+          type: 'application/json',
+        });
         g.navigator.sendBeacon(`${this.eventsBaseUrl}/v1/events/batch`, blob);
       } else {
         this.flush().catch(() => {});

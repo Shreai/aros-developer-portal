@@ -13,14 +13,8 @@
       "path": "/v1/events/batch",
       "method": "POST",
       "description": "Send batch of events for learning/analytics",
-      "requiredHeaders": [
-        "x-shre-tenant",
-        "x-shre-app",
-        "Content-Type"
-      ],
-      "optionalHeaders": [
-        "Authorization"
-      ],
+      "requiredHeaders": ["x-shre-tenant", "x-shre-app", "Content-Type"],
+      "optionalHeaders": ["Authorization"],
       "requestBody": {
         "type": "object",
         "required": ["events"],
@@ -181,11 +175,7 @@
             }
           },
           "expectedStatus": 200,
-          "expectedFieldPresence": [
-            "accepted",
-            "rejected",
-            "trackingEnabled"
-          ]
+          "expectedFieldPresence": ["accepted", "rejected", "trackingEnabled"]
         },
         {
           "name": "reject_missing_x_shre_tenant",
@@ -269,10 +259,7 @@
       "path": "/v1/sdk/session",
       "method": "POST",
       "description": "Mint session token for authenticated mode",
-      "requiredHeaders": [
-        "x-shre-tenant",
-        "Content-Type"
-      ],
+      "requiredHeaders": ["x-shre-tenant", "Content-Type"],
       "requestBody": {
         "type": "object",
         "required": ["tenantId", "app", "mode"],
@@ -379,12 +366,7 @@
             }
           },
           "expectedStatus": 200,
-          "expectedFieldPresence": [
-            "sdkToken",
-            "sessionId",
-            "trackingEnabled",
-            "expiresIn"
-          ]
+          "expectedFieldPresence": ["sdkToken", "sessionId", "trackingEnabled", "expiresIn"]
         },
         {
           "name": "session_read_only_no_token",
@@ -461,9 +443,7 @@
       "path": "/v1/sdk/config",
       "method": "GET",
       "description": "Fetch SDK configuration (kill switch, disabled events, batch settings)",
-      "requiredHeaders": [
-        "x-shre-tenant"
-      ],
+      "requiredHeaders": ["x-shre-tenant"],
       "responses": {
         "200": {
           "description": "Configuration returned",
@@ -591,11 +571,7 @@
       "path": "/v1/sdk/heartbeat",
       "method": "POST",
       "description": "Send device/app liveness signal",
-      "requiredHeaders": [
-        "x-shre-tenant",
-        "x-shre-app",
-        "Content-Type"
-      ],
+      "requiredHeaders": ["x-shre-tenant", "x-shre-app", "Content-Type"],
       "requestBody": {
         "type": "object",
         "required": ["tenantId", "app"],
@@ -761,31 +737,19 @@
       "framework": "JUnit",
       "file": "aros-developer-portal/sdks/kotlin/src/test/kotlin/",
       "testCount": "40+",
-      "coverage": [
-        "All required headers",
-        "All HTTP methods",
-        "All response schemas"
-      ]
+      "coverage": ["All required headers", "All HTTP methods", "All response schemas"]
     },
     "python": {
       "framework": "pytest",
       "file": "aros-developer-portal/sdks/python/tests/test_sdk.py",
       "testCount": "40+",
-      "coverage": [
-        "All required headers",
-        "All HTTP methods",
-        "All response schemas"
-      ]
+      "coverage": ["All required headers", "All HTTP methods", "All response schemas"]
     },
     "dotnet": {
       "framework": "NUnit/xUnit",
       "file": "aros-developer-portal/sdks/dotnet/ShreAI.Tests/",
       "testCount": "40+",
-      "coverage": [
-        "All required headers",
-        "All HTTP methods",
-        "All response schemas"
-      ]
+      "coverage": ["All required headers", "All HTTP methods", "All response schemas"]
     }
   },
   "breakingChangeProtocol": {
@@ -800,7 +764,12 @@
       "x_shre_tenant": {
         "required": true,
         "description": "Identifies tenant/merchant",
-        "enforcedOn": ["POST /v1/events/batch", "GET /v1/sdk/config", "POST /v1/sdk/heartbeat", "POST /v1/sdk/session"]
+        "enforcedOn": [
+          "POST /v1/events/batch",
+          "GET /v1/sdk/config",
+          "POST /v1/sdk/heartbeat",
+          "POST /v1/sdk/session"
+        ]
       },
       "x_shre_app": {
         "required": true,

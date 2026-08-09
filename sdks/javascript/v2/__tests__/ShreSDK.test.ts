@@ -310,7 +310,12 @@ describe('Shre SDK v2.0.0 — Contract Tests', () => {
           'POST /v1/sdk/session': {
             status: 200,
             ok: true,
-            jsonData: { sdkToken: null, sessionId: 'sess-123', trackingEnabled: true, expiresIn: 3600 },
+            jsonData: {
+              sdkToken: null,
+              sessionId: 'sess-123',
+              trackingEnabled: true,
+              expiresIn: 3600,
+            },
           },
         });
 
@@ -318,7 +323,7 @@ describe('Shre SDK v2.0.0 — Contract Tests', () => {
         const tracingFetch: typeof fetchMockFn = async (url, opts) => {
           if (url.includes('/v1/events/batch')) {
             capturedHeaders = Object.fromEntries(
-              Object.entries((opts?.headers as Record<string, string>) ?? {})
+              Object.entries((opts?.headers as Record<string, string>) ?? {}),
             );
           }
           return originalFetch(url, opts);
@@ -353,7 +358,12 @@ describe('Shre SDK v2.0.0 — Contract Tests', () => {
           'POST /v1/sdk/session': {
             status: 200,
             ok: true,
-            jsonData: { sdkToken: null, sessionId: 'sess-123', trackingEnabled: true, expiresIn: 3600 },
+            jsonData: {
+              sdkToken: null,
+              sessionId: 'sess-123',
+              trackingEnabled: true,
+              expiresIn: 3600,
+            },
           },
         });
 
@@ -361,7 +371,7 @@ describe('Shre SDK v2.0.0 — Contract Tests', () => {
         const tracingFetch: typeof fetchMockFn = async (url, opts) => {
           if (url.includes('/v1/events/batch')) {
             capturedHeaders = Object.fromEntries(
-              Object.entries((opts?.headers as Record<string, string>) ?? {})
+              Object.entries((opts?.headers as Record<string, string>) ?? {}),
             );
           }
           return originalFetch(url, opts);
@@ -401,7 +411,12 @@ describe('Shre SDK v2.0.0 — Contract Tests', () => {
           'POST /v1/sdk/session': {
             status: 200,
             ok: true,
-            jsonData: { sdkToken: null, sessionId: 'sess-123', trackingEnabled: true, expiresIn: 3600 },
+            jsonData: {
+              sdkToken: null,
+              sessionId: 'sess-123',
+              trackingEnabled: true,
+              expiresIn: 3600,
+            },
           },
         });
 
@@ -436,7 +451,12 @@ describe('Shre SDK v2.0.0 — Contract Tests', () => {
           'POST /v1/sdk/session': {
             status: 200,
             ok: true,
-            jsonData: { sdkToken: null, sessionId: 'sess-123', trackingEnabled: true, expiresIn: 3600 },
+            jsonData: {
+              sdkToken: null,
+              sessionId: 'sess-123',
+              trackingEnabled: true,
+              expiresIn: 3600,
+            },
           },
         });
 
@@ -444,7 +464,7 @@ describe('Shre SDK v2.0.0 — Contract Tests', () => {
         const tracingFetch: typeof fetchMockFn = async (url, opts) => {
           if (url.includes('/v1/events/batch')) {
             capturedHeaders = Object.fromEntries(
-              Object.entries((opts?.headers as Record<string, string>) ?? {})
+              Object.entries((opts?.headers as Record<string, string>) ?? {}),
             );
           }
           return originalFetch(url, opts);
@@ -464,7 +484,9 @@ describe('Shre SDK v2.0.0 — Contract Tests', () => {
         await sdk.flush();
 
         expect(capturedHeaders).toHaveProperty('Content-Type');
-        expect((capturedHeaders as Record<string, string>)['Content-Type']).toBe('application/json');
+        expect((capturedHeaders as Record<string, string>)['Content-Type']).toBe(
+          'application/json',
+        );
       });
     });
 
@@ -480,7 +502,12 @@ describe('Shre SDK v2.0.0 — Contract Tests', () => {
           'POST /v1/sdk/session': {
             status: 200,
             ok: true,
-            jsonData: { sdkToken: null, sessionId: 'sess-123', trackingEnabled: true, expiresIn: 3600 },
+            jsonData: {
+              sdkToken: null,
+              sessionId: 'sess-123',
+              trackingEnabled: true,
+              expiresIn: 3600,
+            },
           },
         });
 
@@ -514,7 +541,12 @@ describe('Shre SDK v2.0.0 — Contract Tests', () => {
           'POST /v1/sdk/session': {
             status: 200,
             ok: true,
-            jsonData: { sdkToken: 'old-token', sessionId: 'sess-123', trackingEnabled: true, expiresIn: 3600 },
+            jsonData: {
+              sdkToken: 'old-token',
+              sessionId: 'sess-123',
+              trackingEnabled: true,
+              expiresIn: 3600,
+            },
           },
         });
 
@@ -547,7 +579,12 @@ describe('Shre SDK v2.0.0 — Contract Tests', () => {
           'POST /v1/sdk/session': {
             status: 200,
             ok: true,
-            jsonData: { sdkToken: null, sessionId: 'sess-123', trackingEnabled: true, expiresIn: 3600 },
+            jsonData: {
+              sdkToken: null,
+              sessionId: 'sess-123',
+              trackingEnabled: true,
+              expiresIn: 3600,
+            },
           },
         });
 
@@ -580,7 +617,12 @@ describe('Shre SDK v2.0.0 — Contract Tests', () => {
           'POST /v1/sdk/session': {
             status: 200,
             ok: true,
-            jsonData: { sdkToken: null, sessionId: 'sess-123', trackingEnabled: true, expiresIn: 3600 },
+            jsonData: {
+              sdkToken: null,
+              sessionId: 'sess-123',
+              trackingEnabled: true,
+              expiresIn: 3600,
+            },
           },
         });
 
@@ -647,10 +689,20 @@ describe('Shre SDK v2.0.0 — Contract Tests', () => {
               ok: true,
               headers: new Map([['content-type', 'application/json']]),
               async text() {
-                return JSON.stringify({ sdkToken: null, sessionId: 'sess-123', trackingEnabled: true, expiresIn: 3600 });
+                return JSON.stringify({
+                  sdkToken: null,
+                  sessionId: 'sess-123',
+                  trackingEnabled: true,
+                  expiresIn: 3600,
+                });
               },
               async json() {
-                return { sdkToken: null, sessionId: 'sess-123', trackingEnabled: true, expiresIn: 3600 };
+                return {
+                  sdkToken: null,
+                  sessionId: 'sess-123',
+                  trackingEnabled: true,
+                  expiresIn: 3600,
+                };
               },
             } as any;
           }
@@ -752,7 +804,12 @@ describe('Shre SDK v2.0.0 — Contract Tests', () => {
         'POST /v1/sdk/session': {
           status: 200,
           ok: true,
-          jsonData: { sdkToken: null, sessionId: 'sess-123', trackingEnabled: true, expiresIn: 3600 },
+          jsonData: {
+            sdkToken: null,
+            sessionId: 'sess-123',
+            trackingEnabled: true,
+            expiresIn: 3600,
+          },
         },
       });
 
@@ -760,7 +817,7 @@ describe('Shre SDK v2.0.0 — Contract Tests', () => {
       const tracingFetch: typeof fetchMockFn = async (url, opts) => {
         if (url.includes('/v1/sdk/session')) {
           capturedHeaders = Object.fromEntries(
-            Object.entries((opts?.headers as Record<string, string>) ?? {})
+            Object.entries((opts?.headers as Record<string, string>) ?? {}),
           );
         }
         return originalFetch(url, opts);
@@ -790,7 +847,12 @@ describe('Shre SDK v2.0.0 — Contract Tests', () => {
           'POST /v1/sdk/session': {
             status: 200,
             ok: true,
-            jsonData: { sdkToken: null, sessionId: 'sess-123', trackingEnabled: true, expiresIn: 3600 },
+            jsonData: {
+              sdkToken: null,
+              sessionId: 'sess-123',
+              trackingEnabled: true,
+              expiresIn: 3600,
+            },
           },
         })(url, opts);
       };
@@ -816,10 +878,20 @@ describe('Shre SDK v2.0.0 — Contract Tests', () => {
             ok: true,
             headers: new Map([['content-type', 'application/json; charset=utf-8']]),
             async text() {
-              return JSON.stringify({ sdkToken: null, sessionId: 'sess-123', trackingEnabled: true, expiresIn: 3600 });
+              return JSON.stringify({
+                sdkToken: null,
+                sessionId: 'sess-123',
+                trackingEnabled: true,
+                expiresIn: 3600,
+              });
             },
             async json() {
-              return { sdkToken: null, sessionId: 'sess-123', trackingEnabled: true, expiresIn: 3600 };
+              return {
+                sdkToken: null,
+                sessionId: 'sess-123',
+                trackingEnabled: true,
+                expiresIn: 3600,
+              };
             },
           } as any;
         }
@@ -931,7 +1003,12 @@ describe('Shre SDK v2.0.0 — Contract Tests', () => {
         'POST /v1/sdk/session': {
           status: 200,
           ok: true,
-          jsonData: { sdkToken: null, sessionId: 'sess-123', trackingEnabled: true, expiresIn: 3600 },
+          jsonData: {
+            sdkToken: null,
+            sessionId: 'sess-123',
+            trackingEnabled: true,
+            expiresIn: 3600,
+          },
         },
       });
 
@@ -958,12 +1035,24 @@ describe('Shre SDK v2.0.0 — Contract Tests', () => {
           'GET /v1/sdk/config': {
             status: 200,
             ok: true,
-            jsonData: { trackingEnabled: true, disabledEvents: [], piiMasking: true, maxQueueSize: 5000, flushIntervalSeconds: 10, batchSize: 50 },
+            jsonData: {
+              trackingEnabled: true,
+              disabledEvents: [],
+              piiMasking: true,
+              maxQueueSize: 5000,
+              flushIntervalSeconds: 10,
+              batchSize: 50,
+            },
           },
           'POST /v1/sdk/session': {
             status: 200,
             ok: true,
-            jsonData: { sdkToken: null, sessionId: 'sess-123', trackingEnabled: true, expiresIn: 3600 },
+            jsonData: {
+              sdkToken: null,
+              sessionId: 'sess-123',
+              trackingEnabled: true,
+              expiresIn: 3600,
+            },
           },
         })(url, opts);
       };
@@ -987,12 +1076,24 @@ describe('Shre SDK v2.0.0 — Contract Tests', () => {
         'GET /v1/sdk/config': {
           status: 200,
           ok: true,
-          jsonData: { trackingEnabled: true, disabledEvents: [], piiMasking: true, maxQueueSize: 5000, flushIntervalSeconds: 10, batchSize: 50 },
+          jsonData: {
+            trackingEnabled: true,
+            disabledEvents: [],
+            piiMasking: true,
+            maxQueueSize: 5000,
+            flushIntervalSeconds: 10,
+            batchSize: 50,
+          },
         },
         'POST /v1/sdk/session': {
           status: 200,
           ok: true,
-          jsonData: { sdkToken: null, sessionId: 'sess-123', trackingEnabled: true, expiresIn: 3600 },
+          jsonData: {
+            sdkToken: null,
+            sessionId: 'sess-123',
+            trackingEnabled: true,
+            expiresIn: 3600,
+          },
         },
       });
 
@@ -1000,7 +1101,7 @@ describe('Shre SDK v2.0.0 — Contract Tests', () => {
       const tracingFetch: typeof fetchMockFn = async (url, opts) => {
         if (url.includes('/v1/sdk/config')) {
           capturedHeaders = Object.fromEntries(
-            Object.entries((opts?.headers as Record<string, string>) ?? {})
+            Object.entries((opts?.headers as Record<string, string>) ?? {}),
           );
         }
         return originalFetch(url, opts);
@@ -1037,7 +1138,12 @@ describe('Shre SDK v2.0.0 — Contract Tests', () => {
         'POST /v1/sdk/session': {
           status: 200,
           ok: true,
-          jsonData: { sdkToken: null, sessionId: 'sess-123', trackingEnabled: true, expiresIn: 3600 },
+          jsonData: {
+            sdkToken: null,
+            sessionId: 'sess-123',
+            trackingEnabled: true,
+            expiresIn: 3600,
+          },
         },
       });
 
@@ -1073,7 +1179,12 @@ describe('Shre SDK v2.0.0 — Contract Tests', () => {
         'POST /v1/sdk/session': {
           status: 200,
           ok: true,
-          jsonData: { sdkToken: null, sessionId: 'sess-123', trackingEnabled: true, expiresIn: 3600 },
+          jsonData: {
+            sdkToken: null,
+            sessionId: 'sess-123',
+            trackingEnabled: true,
+            expiresIn: 3600,
+          },
         },
       });
 
@@ -1138,7 +1249,12 @@ describe('Shre SDK v2.0.0 — Contract Tests', () => {
         'POST /v1/sdk/session': {
           status: 200,
           ok: true,
-          jsonData: { sdkToken: null, sessionId: 'sess-123', trackingEnabled: true, expiresIn: 3600 },
+          jsonData: {
+            sdkToken: null,
+            sessionId: 'sess-123',
+            trackingEnabled: true,
+            expiresIn: 3600,
+          },
         },
       });
 
@@ -1169,7 +1285,12 @@ describe('Shre SDK v2.0.0 — Contract Tests', () => {
         'POST /v1/sdk/session': {
           status: 200,
           ok: true,
-          jsonData: { sdkToken: null, sessionId: 'sess-123', trackingEnabled: true, expiresIn: 3600 },
+          jsonData: {
+            sdkToken: null,
+            sessionId: 'sess-123',
+            trackingEnabled: true,
+            expiresIn: 3600,
+          },
         },
       });
 
@@ -1206,7 +1327,12 @@ describe('Shre SDK v2.0.0 — Contract Tests', () => {
         'POST /v1/sdk/session': {
           status: 200,
           ok: true,
-          jsonData: { sdkToken: null, sessionId: 'sess-123', trackingEnabled: true, expiresIn: 3600 },
+          jsonData: {
+            sdkToken: null,
+            sessionId: 'sess-123',
+            trackingEnabled: true,
+            expiresIn: 3600,
+          },
         },
       });
 
@@ -1245,7 +1371,12 @@ describe('Shre SDK v2.0.0 — Contract Tests', () => {
         'POST /v1/sdk/session': {
           status: 200,
           ok: true,
-          jsonData: { sdkToken: null, sessionId: 'sess-123', trackingEnabled: true, expiresIn: 3600 },
+          jsonData: {
+            sdkToken: null,
+            sessionId: 'sess-123',
+            trackingEnabled: true,
+            expiresIn: 3600,
+          },
         },
       });
 
@@ -1284,7 +1415,12 @@ describe('Shre SDK v2.0.0 — Contract Tests', () => {
         'POST /v1/sdk/session': {
           status: 200,
           ok: true,
-          jsonData: { sdkToken: null, sessionId: 'sess-123', trackingEnabled: true, expiresIn: 3600 },
+          jsonData: {
+            sdkToken: null,
+            sessionId: 'sess-123',
+            trackingEnabled: true,
+            expiresIn: 3600,
+          },
         },
       });
 
@@ -1332,7 +1468,12 @@ describe('Shre SDK v2.0.0 — Contract Tests', () => {
           'POST /v1/sdk/session': {
             status: 200,
             ok: true,
-            jsonData: { sdkToken: null, sessionId: 'sess-123', trackingEnabled: true, expiresIn: 3600 },
+            jsonData: {
+              sdkToken: null,
+              sessionId: 'sess-123',
+              trackingEnabled: true,
+              expiresIn: 3600,
+            },
           },
         })(url, opts);
       };
@@ -1362,7 +1503,12 @@ describe('Shre SDK v2.0.0 — Contract Tests', () => {
         'POST /v1/sdk/session': {
           status: 200,
           ok: true,
-          jsonData: { sdkToken: null, sessionId: 'sess-123', trackingEnabled: true, expiresIn: 3600 },
+          jsonData: {
+            sdkToken: null,
+            sessionId: 'sess-123',
+            trackingEnabled: true,
+            expiresIn: 3600,
+          },
         },
       });
 
@@ -1370,7 +1516,7 @@ describe('Shre SDK v2.0.0 — Contract Tests', () => {
       const tracingFetch: typeof fetchMockFn = async (url, opts) => {
         if (url.includes('/v1/sdk/heartbeat')) {
           capturedHeaders = Object.fromEntries(
-            Object.entries((opts?.headers as Record<string, string>) ?? {})
+            Object.entries((opts?.headers as Record<string, string>) ?? {}),
           );
         }
         return originalFetch(url, opts);
@@ -1402,10 +1548,20 @@ describe('Shre SDK v2.0.0 — Contract Tests', () => {
             ok: true,
             headers: new Map([['content-type', 'application/json']]),
             async text() {
-              return JSON.stringify({ sdkToken: null, sessionId: 'sess-123', trackingEnabled: true, expiresIn: 3600 });
+              return JSON.stringify({
+                sdkToken: null,
+                sessionId: 'sess-123',
+                trackingEnabled: true,
+                expiresIn: 3600,
+              });
             },
             async json() {
-              return { sdkToken: null, sessionId: 'sess-123', trackingEnabled: true, expiresIn: 3600 };
+              return {
+                sdkToken: null,
+                sessionId: 'sess-123',
+                trackingEnabled: true,
+                expiresIn: 3600,
+              };
             },
           } as any;
         }
@@ -1438,12 +1594,24 @@ describe('Shre SDK v2.0.0 — Contract Tests', () => {
         'GET /v1/sdk/config': {
           status: 200,
           ok: true,
-          jsonData: { trackingEnabled: true, disabledEvents: [], piiMasking: true, maxQueueSize: 5000, flushIntervalSeconds: 10, batchSize: 50 },
+          jsonData: {
+            trackingEnabled: true,
+            disabledEvents: [],
+            piiMasking: true,
+            maxQueueSize: 5000,
+            flushIntervalSeconds: 10,
+            batchSize: 50,
+          },
         },
         'POST /v1/sdk/session': {
           status: 200,
           ok: true,
-          jsonData: { sdkToken: null, sessionId: 'sess-123', trackingEnabled: true, expiresIn: 3600 },
+          jsonData: {
+            sdkToken: null,
+            sessionId: 'sess-123',
+            trackingEnabled: true,
+            expiresIn: 3600,
+          },
         },
         'POST /v1/sdk/heartbeat': {
           status: 200,
@@ -1475,9 +1643,33 @@ describe('Shre SDK v2.0.0 — Contract Tests', () => {
       const collectHeaders: Record<string, Record<string, string>> = {};
 
       fetchMockFn = mockFetch({
-        'POST /v1/events/batch': { status: 200, ok: true, jsonData: { accepted: 1, rejected: 0, trackingEnabled: true, nextFlushSeconds: 10 } },
-        'GET /v1/sdk/config': { status: 200, ok: true, jsonData: { trackingEnabled: true, disabledEvents: [], piiMasking: true, maxQueueSize: 5000, flushIntervalSeconds: 10, batchSize: 50 } },
-        'POST /v1/sdk/session': { status: 200, ok: true, jsonData: { sdkToken: null, sessionId: 'sess-123', trackingEnabled: true, expiresIn: 3600 } },
+        'POST /v1/events/batch': {
+          status: 200,
+          ok: true,
+          jsonData: { accepted: 1, rejected: 0, trackingEnabled: true, nextFlushSeconds: 10 },
+        },
+        'GET /v1/sdk/config': {
+          status: 200,
+          ok: true,
+          jsonData: {
+            trackingEnabled: true,
+            disabledEvents: [],
+            piiMasking: true,
+            maxQueueSize: 5000,
+            flushIntervalSeconds: 10,
+            batchSize: 50,
+          },
+        },
+        'POST /v1/sdk/session': {
+          status: 200,
+          ok: true,
+          jsonData: {
+            sdkToken: null,
+            sessionId: 'sess-123',
+            trackingEnabled: true,
+            expiresIn: 3600,
+          },
+        },
         'POST /v1/sdk/heartbeat': { status: 200, ok: true, jsonData: { status: 'ok' } },
       });
 
@@ -1485,7 +1677,7 @@ describe('Shre SDK v2.0.0 — Contract Tests', () => {
       const tracingFetch: typeof fetchMockFn = async (url, opts) => {
         const endpoint = (url as string).replace(/^https?:\/\/[^/]+/, '');
         collectHeaders[endpoint] = Object.fromEntries(
-          Object.entries((opts?.headers as Record<string, string>) ?? {})
+          Object.entries((opts?.headers as Record<string, string>) ?? {}),
         );
         return originalFetch(url, opts);
       };
@@ -1513,9 +1705,33 @@ describe('Shre SDK v2.0.0 — Contract Tests', () => {
       const collectHeaders: Record<string, Record<string, string>> = {};
 
       fetchMockFn = mockFetch({
-        'POST /v1/events/batch': { status: 200, ok: true, jsonData: { accepted: 1, rejected: 0, trackingEnabled: true, nextFlushSeconds: 10 } },
-        'GET /v1/sdk/config': { status: 200, ok: true, jsonData: { trackingEnabled: true, disabledEvents: [], piiMasking: true, maxQueueSize: 5000, flushIntervalSeconds: 10, batchSize: 50 } },
-        'POST /v1/sdk/session': { status: 200, ok: true, jsonData: { sdkToken: null, sessionId: 'sess-123', trackingEnabled: true, expiresIn: 3600 } },
+        'POST /v1/events/batch': {
+          status: 200,
+          ok: true,
+          jsonData: { accepted: 1, rejected: 0, trackingEnabled: true, nextFlushSeconds: 10 },
+        },
+        'GET /v1/sdk/config': {
+          status: 200,
+          ok: true,
+          jsonData: {
+            trackingEnabled: true,
+            disabledEvents: [],
+            piiMasking: true,
+            maxQueueSize: 5000,
+            flushIntervalSeconds: 10,
+            batchSize: 50,
+          },
+        },
+        'POST /v1/sdk/session': {
+          status: 200,
+          ok: true,
+          jsonData: {
+            sdkToken: null,
+            sessionId: 'sess-123',
+            trackingEnabled: true,
+            expiresIn: 3600,
+          },
+        },
         'POST /v1/sdk/heartbeat': { status: 200, ok: true, jsonData: { status: 'ok' } },
       });
 
@@ -1523,7 +1739,7 @@ describe('Shre SDK v2.0.0 — Contract Tests', () => {
       const tracingFetch: typeof fetchMockFn = async (url, opts) => {
         const endpoint = (url as string).replace(/^https?:\/\/[^/]+/, '');
         collectHeaders[endpoint] = Object.fromEntries(
-          Object.entries((opts?.headers as Record<string, string>) ?? {})
+          Object.entries((opts?.headers as Record<string, string>) ?? {}),
         );
         return originalFetch(url, opts);
       };

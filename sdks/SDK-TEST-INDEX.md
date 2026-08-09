@@ -79,6 +79,7 @@ aros-developer-portal/sdks/
 **Purpose:** Complete testing reference
 
 **Contents:**
+
 - Quick start (30 seconds)
 - Test infrastructure overview
 - JavaScript test suite patterns
@@ -97,6 +98,7 @@ aros-developer-portal/sdks/
 **Purpose:** 40-item testing matrix for all platforms
 
 **Contents:**
+
 - Test categories (5 suites, 40 tests)
 - Platform matrix (JavaScript, iOS, Android, Python, .NET)
 - Per-platform execution instructions
@@ -115,6 +117,7 @@ aros-developer-portal/sdks/
 **Format:** JSON (single source of truth for all 5 platforms)
 
 **Contents:**
+
 ```json
 {
   "metadata": { version, date, locked, policy },
@@ -149,6 +152,7 @@ aros-developer-portal/sdks/
 **Framework:** Vitest + fetch mocking
 
 **Test suites:**
+
 ```
 ✓ Endpoint: POST /v1/events/batch (12 tests)
 ✓ Endpoint: POST /v1/sdk/session (8 tests)
@@ -158,6 +162,7 @@ aros-developer-portal/sdks/
 ```
 
 **Key patterns:**
+
 - Mock fetch with response configuration
 - Header verification (capture and assert)
 - Request body validation (serialize and check)
@@ -174,6 +179,7 @@ aros-developer-portal/sdks/
 **Purpose:** Vitest configuration for Node environment
 
 **Features:**
+
 - Node.js environment
 - Global test utilities
 - V8 code coverage
@@ -189,6 +195,7 @@ aros-developer-portal/sdks/
 **Purpose:** Executive summary of what was delivered
 
 **Contents:**
+
 - Overview of 6 deliverables
 - Test coverage by endpoint
 - Test implementation patterns
@@ -212,6 +219,7 @@ npm test
 ```
 
 **Expected output:**
+
 ```
 ✓ Shre SDK v2.0.0 — Contract Tests (40+ tests)
   ✓ Endpoint: POST /v1/events/batch (12 tests)
@@ -249,18 +257,23 @@ cd aros-developer-portal/sdks/dotnet && dotnet test
 ### Endpoints Tested
 
 ✅ **POST /v1/events/batch** — Send events for learning/analytics
+
 - 12 tests: single event, multiple events, idempotency, headers, errors
 
 ✅ **POST /v1/sdk/session** — Authenticate and mint token
+
 - 8 tests: read_write mode, bootstrap key, headers, errors
 
 ✅ **GET /v1/sdk/config** — Fetch configuration
+
 - 8 tests: kill switch, disabled events, field validation, errors
 
 ✅ **POST /v1/sdk/heartbeat** — Device liveness signal
+
 - 8 tests: heartbeat payload, queue tracking, headers, errors
 
 ✅ **Cross-endpoint validation**
+
 - 4 tests: header enforcement, JSON always (never HTML), multi-endpoint
 
 ### Error Codes Tested
@@ -277,23 +290,27 @@ cd aros-developer-portal/sdks/dotnet && dotnet test
 ### Validation Points
 
 ✅ **Headers:**
+
 - x-shre-tenant (required on all endpoints)
 - x-shre-app (required on batch/heartbeat)
 - Authorization (optional, read_write mode)
 - Content-Type (application/json on POST)
 
 ✅ **HTTP Methods:**
+
 - POST /v1/events/batch
 - POST /v1/sdk/session
 - GET /v1/sdk/config (never POST)
 - POST /v1/sdk/heartbeat
 
 ✅ **Request Payloads:**
+
 - Event batches (eventId, eventName required; metadata optional)
 - Session bootstrap (tenantId, app, mode required; bootstrapKey if read_write)
 - Heartbeat (tenantId, app required; deviceId, eventsQueued optional)
 
 ✅ **Response Schemas:**
+
 - Batch: {accepted, rejected, trackingEnabled, nextFlushSeconds}
 - Session: {sdkToken, sessionId, trackingEnabled, expiresIn}
 - Config: {trackingEnabled, disabledEvents, piiMasking, maxQueueSize, ...}
@@ -304,21 +321,26 @@ cd aros-developer-portal/sdks/dotnet && dotnet test
 ## Key Features
 
 ### 🎯 Single Source of Truth
+
 `contracts.test.json` is the specification for all 5 platforms. No duplication, no drift.
 
 ### 🚀 Comprehensive Coverage
+
 40+ tests per platform = 200 total test executions across all SDKs.
 
 ### 🛡️ Breaking Change Protection
+
 Tests block breaking changes at CI time. 6-month deprecation window for safe upgrades.
 
 ### 🔧 Developer-Friendly
+
 - Quick start in 30 seconds
 - Clear error messages
 - Troubleshooting guides
 - Platform-specific instructions
 
 ### 📊 CI/CD Ready
+
 Pre-commit hooks + GitHub Actions can validate all platforms before merge.
 
 ---
@@ -371,27 +393,27 @@ See [TESTING.md#troubleshooting](./TESTING.md#troubleshooting) for common failur
 
 ## Platform Implementation Timeline
 
-| Platform | Framework | Status | Responsible |
-|----------|-----------|--------|-------------|
-| **JavaScript** | Vitest | ✅ Complete | SDK team |
-| **iOS** | XCTest | ✅ Via shre-router | Platform team |
-| **Android** | JUnit | ⏳ TBD | Android team |
-| **Python** | pytest | ⏳ TBD | Python team |
-| **.NET** | NUnit | ⏳ TBD | .NET team |
+| Platform       | Framework | Status             | Responsible   |
+| -------------- | --------- | ------------------ | ------------- |
+| **JavaScript** | Vitest    | ✅ Complete        | SDK team      |
+| **iOS**        | XCTest    | ✅ Via shre-router | Platform team |
+| **Android**    | JUnit     | ⏳ TBD             | Android team  |
+| **Python**     | pytest    | ⏳ TBD             | Python team   |
+| **.NET**       | NUnit     | ⏳ TBD             | .NET team     |
 
 ---
 
 ## References
 
-| Document | Purpose |
-|----------|---------|
-| [TESTING.md](./TESTING.md) | Complete testing guide |
-| [TEST-CHECKLIST.md](./TEST-CHECKLIST.md) | 40-item test matrix |
-| [contracts.test.json](./contracts.test.json) | Contract specification |
-| [DELIVERABLES-SUMMARY.md](./DELIVERABLES-SUMMARY.md) | What was delivered |
-| [ShreSDK.test.ts](./javascript/v2/__tests__/ShreSDK.test.ts) | JavaScript tests |
-| [vitest.config.ts](./javascript/v2/vitest.config.ts) | Vitest config |
-| [SDK-PLATFORM-STATUS.md](../SDK-PLATFORM-STATUS.md) | Platform status (main repo) |
+| Document                                                     | Purpose                     |
+| ------------------------------------------------------------ | --------------------------- |
+| [TESTING.md](./TESTING.md)                                   | Complete testing guide      |
+| [TEST-CHECKLIST.md](./TEST-CHECKLIST.md)                     | 40-item test matrix         |
+| [contracts.test.json](./contracts.test.json)                 | Contract specification      |
+| [DELIVERABLES-SUMMARY.md](./DELIVERABLES-SUMMARY.md)         | What was delivered          |
+| [ShreSDK.test.ts](./javascript/v2/__tests__/ShreSDK.test.ts) | JavaScript tests            |
+| [vitest.config.ts](./javascript/v2/vitest.config.ts)         | Vitest config               |
+| [SDK-PLATFORM-STATUS.md](../SDK-PLATFORM-STATUS.md)          | Platform status (main repo) |
 
 ---
 

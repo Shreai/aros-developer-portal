@@ -4,14 +4,14 @@ Developer portal and SDKs for integrating any POS system with the AROS AI platfo
 
 ## SDKs
 
-| Platform | Directory | Package | Status |
-|----------|-----------|---------|--------|
-| JavaScript/TypeScript | `sdks/javascript/` | `@aros/pos-sdk` | npm |
-| Python | `sdks/python/` | `aros-pos-sdk` | PyPI |
-| C# / .NET | `sdks/dotnet/` | `Aros.POS.SDK` | NuGet |
-| Swift (iOS/macOS) | `sdks/swift/` | `ArosPOS` | SwiftPM |
-| Kotlin (Android) | `sdks/kotlin/` | `com.aros:pos-sdk` | Maven |
-| REST API | `sdks/rest/` | OpenAPI 3.1 spec | Any language |
+| Platform              | Directory          | Package            | Status       |
+| --------------------- | ------------------ | ------------------ | ------------ |
+| JavaScript/TypeScript | `sdks/javascript/` | `@aros/pos-sdk`    | npm          |
+| Python                | `sdks/python/`     | `aros-pos-sdk`     | PyPI         |
+| C# / .NET             | `sdks/dotnet/`     | `Aros.POS.SDK`     | NuGet        |
+| Swift (iOS/macOS)     | `sdks/swift/`      | `ArosPOS`          | SwiftPM      |
+| Kotlin (Android)      | `sdks/kotlin/`     | `com.aros:pos-sdk` | Maven        |
+| REST API              | `sdks/rest/`       | OpenAPI 3.1 spec   | Any language |
 
 ## Portal
 
@@ -26,25 +26,27 @@ npm run dev    # http://localhost:3200
 ## Quick Start
 
 ### JavaScript
+
 ```bash
 npm install @aros/pos-sdk
 ```
 
 ```typescript
-import { createArosPOS } from "@aros/pos-sdk";
+import { createArosPOS } from '@aros/pos-sdk';
 
 const pos = createArosPOS({
-  endpoint: "http://your-server:5497",
-  tenantId: "store-42",
-  vendor: "verifone-commander",
-  deviceId: "REG-001",
+  endpoint: 'http://your-server:5497',
+  tenantId: 'store-42',
+  vendor: 'verifone-commander',
+  deviceId: 'REG-001',
 });
 
-pos.itemScanned({ barcode: "012345", price: 14.99, description: "Fireball" });
-const recs = await pos.getRecommendations("SKU-001");
+pos.itemScanned({ barcode: '012345', price: 14.99, description: 'Fireball' });
+const recs = await pos.getRecommendations('SKU-001');
 ```
 
 ### Python
+
 ```bash
 pip install aros-pos-sdk
 ```

@@ -11,6 +11,7 @@
 This checklist ensures ALL SDKs (iOS, Android, Web, Python, .NET) pass the same 40+ contract tests that validate the 4 locked endpoints.
 
 **What's being tested:**
+
 - POST /v1/events/batch — Event batching
 - POST /v1/sdk/session — Authentication
 - GET /v1/sdk/config — Configuration
@@ -111,7 +112,7 @@ Contract tests prevent breaking changes. Every test must pass on every platform,
 ## Platform Test Matrix
 
 | Test Case                    | JavaScript | iOS | Android | Python | .NET |
-|------------------------------|------------|-----|---------|--------|------|
+| ---------------------------- | ---------- | --- | ------- | ------ | ---- |
 | accept_single_event          | [ ]        | [ ] | [ ]     | [ ]    | [ ]  |
 | accept_multiple_events       | [ ]        | [ ] | [ ]     | [ ]    | [ ]  |
 | include_eventId_idempotency  | [ ]        | [ ] | [ ]     | [ ]    | [ ]  |
@@ -172,6 +173,7 @@ npm test
 **Framework:** Vitest
 
 **Expected results:**
+
 ```
 ✓ Shre SDK v2.0.0 — Contract Tests (40+ tests)
   ✓ Endpoint: POST /v1/events/batch (12 tests)
@@ -249,6 +251,7 @@ dotnet test ShreAI.Tests.csproj
 ### If tests fail:
 
 1. **Check endpoint status**
+
    ```bash
    curl -I https://api.shre.ai/health
    curl -I https://events.shre.ai/health
@@ -269,14 +272,14 @@ dotnet test ShreAI.Tests.csproj
 
 ### Common failures:
 
-| Symptom                          | Cause                                    | Fix                                        |
-|----------------------------------|------------------------------------------|--------------------------------------------|
-| "Missing required header"        | x-shre-tenant or x-shre-app not sent    | Verify request headers match spec          |
-| "Invalid JSON response"          | Server returned HTML on error           | Check endpoint for errors                  |
-| "Unexpected response shape"      | Response field was renamed/removed      | Update test expectations + update all SDKs |
-| "401 Unauthorized"               | Token expired or invalid                 | Re-bootstrap session                       |
-| "429 Rate Limited"               | Too many requests too fast              | Reduce test concurrency                    |
-| "Timeout"                        | Network latency or endpoint down        | Check endpoint health, increase timeout    |
+| Symptom                     | Cause                                | Fix                                        |
+| --------------------------- | ------------------------------------ | ------------------------------------------ |
+| "Missing required header"   | x-shre-tenant or x-shre-app not sent | Verify request headers match spec          |
+| "Invalid JSON response"     | Server returned HTML on error        | Check endpoint for errors                  |
+| "Unexpected response shape" | Response field was renamed/removed   | Update test expectations + update all SDKs |
+| "401 Unauthorized"          | Token expired or invalid             | Re-bootstrap session                       |
+| "429 Rate Limited"          | Too many requests too fast           | Reduce test concurrency                    |
+| "Timeout"                   | Network latency or endpoint down     | Check endpoint health, increase timeout    |
 
 ---
 
@@ -346,6 +349,7 @@ Runs all SDK tests. If any fail, commit is blocked.
 ### Quality gate
 
 If tests fail in CI:
+
 1. Change is immediately blocked
 2. Author is notified
 3. Change cannot be merged until tests pass

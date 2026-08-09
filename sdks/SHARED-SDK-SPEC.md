@@ -12,12 +12,12 @@
 
 ## Endpoints
 
-| URL                                  | Plane   | Used by                                  |
-| ------------------------------------ | ------- | ---------------------------------------- |
-| `https://apiauth.shre.ai/v1/sdk/session`   | Control | Mint JWT (read_write) or fetch runtime config (read_only). Required on init. |
-| `https://apiauth.shre.ai/v1/sdk/config`    | Control | Periodic kill-switch + disabled-events refresh (every 5 min).               |
-| `https://events.shre.ai/v1/events/batch`   | Data    | Main ingest path. Batched events. Idempotent on `(tenant_id, event_id)`.    |
-| `https://events.shre.ai/v1/sdk/heartbeat`  | Data    | Optional liveness ping with queue depth.                                    |
+| URL                                       | Plane   | Used by                                                                      |
+| ----------------------------------------- | ------- | ---------------------------------------------------------------------------- |
+| `https://apiauth.shre.ai/v1/sdk/session`  | Control | Mint JWT (read_write) or fetch runtime config (read_only). Required on init. |
+| `https://apiauth.shre.ai/v1/sdk/config`   | Control | Periodic kill-switch + disabled-events refresh (every 5 min).                |
+| `https://events.shre.ai/v1/events/batch`  | Data    | Main ingest path. Batched events. Idempotent on `(tenant_id, event_id)`.     |
+| `https://events.shre.ai/v1/sdk/heartbeat` | Data    | Optional liveness ping with queue depth.                                     |
 
 **Forbidden host:** any hostname that starts with `downloads.` — that's the SDK package mirror, not an API. Every SDK MUST refuse to initialize against `downloads.*` and explain in the error.
 
@@ -61,25 +61,25 @@ Idempotency: server upserts on `(tenant_id, event_id)`. Retries are safe.
 
 ## HTTP headers (every request)
 
-| Header                | Required when         | Value                                   |
-| --------------------- | --------------------- | --------------------------------------- |
-| `Content-Type`        | POST                  | `application/json`                      |
-| `Authorization`       | mode = read_write     | `Bearer <jwt>`                          |
-| `X-Shre-Tenant`       | always                | tenantId                                |
-| `X-Shre-Store`        | optional              | storeId                                 |
-| `X-Shre-App`          | always                | app                                     |
-| `X-Shre-SDK-Version`  | always                | sdkVersion (e.g. `swift/2.0.0`)         |
+| Header               | Required when     | Value                           |
+| -------------------- | ----------------- | ------------------------------- |
+| `Content-Type`       | POST              | `application/json`              |
+| `Authorization`      | mode = read_write | `Bearer <jwt>`                  |
+| `X-Shre-Tenant`      | always            | tenantId                        |
+| `X-Shre-Store`       | optional          | storeId                         |
+| `X-Shre-App`         | always            | app                             |
+| `X-Shre-SDK-Version` | always            | sdkVersion (e.g. `swift/2.0.0`) |
 
 ## Failure handling matrix (client behavior)
 
-| HTTP | Action                                                         |
-| ---- | -------------------------------------------------------------- |
-| 200  | Drain accepted events from queue                                |
-| 401  | Re-bootstrap session (refresh JWT). One retry per failure.      |
-| 403  | Set local kill-switch — stop tracking until next config refresh |
-| 429  | Backoff: 5s → 15s → 30s → 60s → 300s. Don't drop events.        |
-| 5xx  | Same backoff schedule. Events stay queued.                      |
-| network offline | Stay queued. Flush on next interval after recovery.   |
+| HTTP            | Action                                                          |
+| --------------- | --------------------------------------------------------------- |
+| 200             | Drain accepted events from queue                                |
+| 401             | Re-bootstrap session (refresh JWT). One retry per failure.      |
+| 403             | Set local kill-switch — stop tracking until next config refresh |
+| 429             | Backoff: 5s → 15s → 30s → 60s → 300s. Don't drop events.        |
+| 5xx             | Same backoff schedule. Events stay queued.                      |
+| network offline | Stay queued. Flush on next interval after recovery.             |
 
 ## Local queue requirements
 
@@ -94,14 +94,14 @@ Idempotency: server upserts on `(tenant_id, event_id)`. Retries are safe.
 
 ## Edge / size budget
 
-| Lang   | Max .min size  | Max deps     |
-| ------ | -------------- | ------------ |
-| JS     | 12 KB packed   | 0            |
-| Swift  | 1 source file  | 0 (URLSession) |
-| Kotlin | 1 source file  | 0 (HttpURLConnection) |
-| Python | 1 source file  | 0 (urllib stdlib) |
-| .NET   | 1 source file  | 0 (HttpClient stdlib) |
-| REST   | OpenAPI spec   | n/a          |
+| Lang   | Max .min size | Max deps              |
+| ------ | ------------- | --------------------- |
+| JS     | 12 KB packed  | 0                     |
+| Swift  | 1 source file | 0 (URLSession)        |
+| Kotlin | 1 source file | 0 (HttpURLConnection) |
+| Python | 1 source file | 0 (urllib stdlib)     |
+| .NET   | 1 source file | 0 (HttpClient stdlib) |
+| REST   | OpenAPI spec  | n/a                   |
 
 ## Conformance test (every SDK must pass)
 
